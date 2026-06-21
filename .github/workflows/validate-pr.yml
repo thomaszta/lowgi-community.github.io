@@ -1,0 +1,27 @@
+name: Validate OKF Format
+
+on:
+  pull_request:
+    paths:
+      - 'content/**/*.md'
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for required 'type:' field
+        run: |
+          errors=0
+          for file in $(git diff --name-only --diff-filter=AM ${{ github.event.pull_request.base.sha }}...HEAD | grep '\.md$' | grep -v 'index.md' | grep -v 'log.md'); do
+            echo "Checking $file..."
+            if ! grep -q "^type:" "$file"; then
+              echo "Error: File '$file' is missing a 'type:' field in its frontmatter."
+              errors=$((errors + 1))
+            fi
+          done
+          if [ $errors -gt 0 ]; then
+            echo "Found $errors file(s) missing required 'type:' field."
+            exit 1
+          fi
+          echo "All required files have a 'type:' field."
