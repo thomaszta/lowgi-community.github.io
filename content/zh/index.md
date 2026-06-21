@@ -17,6 +17,7 @@ timestamp: 2026-06-21T10:00:00Z
 - **核心概念** ([concepts/](concepts/))：了解GI/GL是什么，为什么它对糖尿病人很重要。
 - **食材库** ([foods/](foods/))：按类别查找食物的GI值、营养特点。
 - **食谱库** ([recipes/](recipes/))：获取经过社区验证的低GI食谱，包含做法和营养分析。
+- **低GI成品食品** ([products/](products/))：查询市售低GI商品的面包、面条、零食等产品信息。
 - **实用指南** ([guides/](guides/))：掌握选购、烹饪和外出就餐的小技巧。
 - **社区共建** ([community/](community/))：查看FAQ和社区贡献故事。
 

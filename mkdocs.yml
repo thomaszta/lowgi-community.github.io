@@ -46,6 +46,10 @@ nav:
           - recipes/main-meals/grilled-chicken-salad.md
       - Snacks:
           - recipes/snacks/greek-yogurt-berry-parfait.md
+  - Commercial Products:
+      - products/index.md
+      - Breads: products/breads/whole-wheat-bread.md
+      - Noodles: products/noodles/konjac-noodles.md
   - Practical Guides:
       - guides/how-to-read-food-labels.md
       - guides/dining-out-tips.md

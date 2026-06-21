@@ -39,6 +39,31 @@ lang: "en"
 # Rolled Oats
 ```
 
+## Commercial Product Submissions
+
+When adding a commercially available low-GI product:
+
+- Use `type: "Product"` in the frontmatter
+- Include the `brand` and `gi_value` fields
+- Base nutritional data on the product's official nutrition label
+- Note the purchase channel (e.g., supermarket, online retailer)
+- Add to the correct category directory under `products/` (breads/, noodles/, snacks/, etc.)
+- Example fields:
+  ```yaml
+  ---
+  type: "Product"
+  title: "Whole Wheat Bread"
+  brand: "Brand Name"
+  description: "Commercially available low-GI whole wheat bread."
+  gi_value: "Approx. 50-55"
+  tags: [bread, whole-grain, low-GI]
+  purchase: "Available at major supermarkets"
+  source: "Based on product nutrition label"
+  timestamp: 2026-06-21T13:00:00Z
+  lang: "en"
+  ---
+  ```
+
 ## Multi-Language Guidelines
 
 - Place content in the correct language directory: `content/en/`, `content/zh/`, etc.
@@ -82,6 +107,31 @@ lang: "en"
 - `source` — 推荐，注明信息来源
 - `timestamp` — 推荐（ISO 8601 格式）
 - `lang` — 推荐，语言代码，如 `zh`、`en`
+
+## 成品食品提交规范
+
+添加市售低GI成品食品时：
+
+- YAML 元数据使用 `type: "Product"`
+- 必须包含 `brand`（品牌）和 `gi_value`（GI值估计）字段
+- 营养数据以产品包装上的营养标签为准
+- 注明购买渠道（超市、线上平台等）
+- 放入 `products/` 下对应的分类目录（breads/、noodles/、snacks/ 等）
+- 示例字段：
+  ```yaml
+  ---
+  type: "Product"
+  title: "全麦面包（某品牌）"
+  brand: "品牌名称"
+  description: "市售全麦面包，全麦粉含量≥50%。"
+  gi_value: "约 50-55"
+  tags: [面包, 全谷物, 低GI]
+  purchase: "大型超市、线上电商平台有售"
+  source: "参考产品包装营养标签"
+  timestamp: 2026-06-21T13:00:00Z
+  lang: "zh"
+  ---
+  ```
 
 ## 多语言指引
 

@@ -17,6 +17,7 @@ This knowledge base aims to provide reliable, practical low-GI dietary reference
 - **Core Concepts** ([concepts/](concepts/)): Learn what GI and GL are, and why they matter for diabetes.
 - **Food Database** ([foods/](foods/)): Look up GI values and nutritional profiles by category.
 - **Recipe Collection** ([recipes/](recipes/)): Get community-verified low-GI recipes with instructions and nutritional analysis.
+- **Low-GI Products** ([products/](products/)): Look up commercially available low-GI breads, noodles, snacks, and more.
 - **Practical Guides** ([guides/](guides/)): Master shopping, cooking, and dining-out tips.
 - **Community** ([community/](community/)): Check FAQs and contributor stories.
 
