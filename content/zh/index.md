@@ -14,13 +14,13 @@ timestamp: 2026-06-21T10:00:00Z
 
 ## 📖 快速导航
 
-- **核心概念** ([concepts/](concepts/))：了解GI/GL是什么，为什么它对糖尿病人很重要。
-- **食材库** ([foods/](foods/))：按类别查找食物的GI值、营养特点。
-- **食谱库** ([recipes/](recipes/))：获取经过社区验证的低GI食谱，包含做法和营养分析。
+- **核心概念** ([concepts/glycemic-index/](concepts/glycemic-index/))：了解GI/GL是什么，为什么它对糖尿病人很重要。
+- **食材库** ([foods/grains/rolled-oats/](foods/grains/rolled-oats/))：按类别查找食物的GI值、营养特点。
+- **食谱库** ([recipes/breakfast/oatmeal-berry-bowl/](recipes/breakfast/oatmeal-berry-bowl/))：获取经过社区验证的低GI食谱，包含做法和营养分析。
 - **低GI成品食品** ([products/](products/))：查询市售低GI商品的面包、面条、零食等产品信息。
-- **实用指南** ([guides/](guides/))：掌握选购、烹饪和外出就餐的小技巧。
-- **社区共建** ([community/](community/))：查看FAQ和社区贡献故事。
+- **实用指南** ([guides/how-to-read-food-labels/](guides/how-to-read-food-labels/))：掌握选购、烹饪和外出就餐的小技巧。
+- **社区共建** ([community/faq/](community/faq/))：查看FAQ和社区贡献故事。
 
 ## 📜 最近更新
 
-请查看 [更新日志](log/) 了解知识库的最新变动。
+请查看 [GitHub 提交记录](https://github.com/thomaszta/lowgi-community.github.io/commits/master/) 了解知识库的最新变动。

@@ -49,5 +49,5 @@ timestamp: 2026-06-21T13:00:00Z
 
 ## 相关链接
 
-- [关于GI值的概念](/concepts/glycemic-index/)
-- [如何阅读食品标签](/guides/how-to-read-food-labels/)
+- [关于GI值的概念](../../concepts/glycemic-index/)
+- [如何阅读食品标签](../../guides/how-to-read-food-labels/)

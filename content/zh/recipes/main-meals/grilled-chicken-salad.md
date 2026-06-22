@@ -11,11 +11,11 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 用料
 
-- [鸡胸肉](/foods/proteins/chicken-breast/) 150g
-- [西兰花](/foods/vegetables/broccoli/) 100g
+- [鸡胸肉](../../foods/proteins/chicken-breast/) 150g
+- [西兰花](../../foods/vegetables/broccoli/) 100g
 - 混合生菜 100g
 - 圣女果 5颗
-- [藜麦](/foods/grains/quinoa/) 30g（提前煮熟）
+- [藜麦](../../foods/grains/quinoa/) 30g（提前煮熟）
 - 橄榄油 2茶匙
 - 柠檬汁 1汤匙
 - 盐、黑胡椒、迷迭香 适量

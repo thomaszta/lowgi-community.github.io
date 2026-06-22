@@ -28,4 +28,4 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 相关链接
 
-- [关于GI值的概念](/concepts/glycemic-index/)
+- [关于GI值的概念](../../concepts/glycemic-index/)

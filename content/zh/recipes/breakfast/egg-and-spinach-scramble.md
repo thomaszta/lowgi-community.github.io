@@ -11,8 +11,8 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 用料
 
-- [鸡蛋](/foods/proteins/egg/) 2颗
-- [菠菜](/foods/vegetables/spinach/) 100g
+- [鸡蛋](../../foods/proteins/egg/) 2颗
+- [菠菜](../../foods/vegetables/spinach/) 100g
 - 橄榄油 1茶匙
 - 盐、黑胡椒 少许
 - 大蒜 1瓣（切片，可选）

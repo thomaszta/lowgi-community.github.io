@@ -11,8 +11,8 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 用料
 
-- [传统燕麦片](/foods/grains/rolled-oats/) 40g
-- [蓝莓](/foods/fruits/blueberry/) 50g
+- [传统燕麦片](../../foods/grains/rolled-oats/) 40g
+- [蓝莓](../../foods/fruits/blueberry/) 50g
 - 牛奶（或杏仁奶） 200ml
 - 核桃 15g（掰碎）
 - 肉桂粉 少许（可选）
