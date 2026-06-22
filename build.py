@@ -15,7 +15,7 @@ from html import escape
 import yaml
 import markdown
 
-SITE_URL = "https://thomaszta.github.io/lowgi-community.github.io"
+SITE_URL = os.environ.get("SITE_URL", "https://thomaszta.github.io/lowgi-community.github.io")
 CONTENT_DIR = "content"
 OUTPUT_DIR = "site"
 DEFAULT_LANG = "zh"

@@ -33,6 +33,8 @@ jobs:
 
       - name: Build static site
         run: python build.py
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://thomaszta.github.io/lowgi-community.github.io' }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
