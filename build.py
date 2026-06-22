@@ -20,26 +20,31 @@ CONTENT_DIR = "content"
 OUTPUT_DIR = "site"
 DEFAULT_LANG = "zh"
 
-DIR_NAMES = {
-    "concepts": { "zh": "核心概念", "en": "Concepts" },
-    "foods": { "zh": "食材库", "en": "Foods" },
-    "recipes": { "zh": "食谱库", "en": "Recipes" },
-    "guides": { "zh": "实用指南", "en": "Guides" },
-    "community": { "zh": "社区", "en": "Community" },
-    "products": { "zh": "成品食品", "en": "Products" },
-    "grains": { "zh": "谷类", "en": "Grains" },
-    "legumes": { "zh": "豆类", "en": "Legumes" },
-    "vegetables": { "zh": "蔬菜", "en": "Vegetables" },
-    "fruits": { "zh": "水果", "en": "Fruits" },
-    "proteins": { "zh": "蛋白质", "en": "Proteins" },
-    "breads": { "zh": "面包类", "en": "Breads" },
-    "noodles": { "zh": "面条类", "en": "Noodles" },
-    "snacks": { "zh": "零食类", "en": "Snacks" },
-    "beverages": { "zh": "饮品类", "en": "Beverages" },
-    "condiments": { "zh": "调味品类", "en": "Condiments" },
-    "breakfast": { "zh": "早餐", "en": "Breakfast" },
-    "main-meals": { "zh": "正餐", "en": "Main Meals" },
-}
+def dir_label(key, lang):
+    LABELS = {
+        "concepts": { "zh": "核心概念", "en": "Concepts" },
+        "foods": { "zh": "食材库", "en": "Foods" },
+        "recipes": { "zh": "食谱库", "en": "Recipes" },
+        "guides": { "zh": "实用指南", "en": "Guides" },
+        "community": { "zh": "社区", "en": "Community" },
+        "products": { "zh": "成品食品", "en": "Products" },
+        "grains": { "zh": "谷类", "en": "Grains" },
+        "vegetables": { "zh": "蔬菜", "en": "Vegetables" },
+        "fruits": { "zh": "水果", "en": "Fruits" },
+        "proteins": { "zh": "蛋白质", "en": "Proteins" },
+        "breads": { "zh": "面包类", "en": "Breads" },
+        "noodles": { "zh": "面条类", "en": "Noodles" },
+        "snacks": { "zh": "零食类", "en": "Snacks" },
+        "beverages": { "zh": "饮品类", "en": "Beverages" },
+        "condiments": { "zh": "调味品类", "en": "Condiments" },
+        "breakfast": { "zh": "早餐", "en": "Breakfast" },
+        "main-meals": { "zh": "正餐", "en": "Main Meals" },
+    }
+    if key in LABELS:
+        return LABELS[key].get(lang, key)
+    if lang == "zh":
+        return key
+    return key.replace("-", " ").title()
 
 TYPE_ICONS = {
     "Concept": "🧠",
@@ -268,7 +273,7 @@ class OKFBuild:
         for key in keys:
             node = tree[key]
             page = node.get("_page")
-            label = DIR_NAMES.get(key, {}).get(lang, key)
+            label = page.title if page else dir_label(key, lang)
             icon = ""
             if page and page.type in TYPE_ICONS:
                 icon = TYPE_ICONS[page.type] + " "
@@ -279,7 +284,10 @@ class OKFBuild:
                 li_class += " has-children"
 
             link = ""
-            if page:
+            if page and not has_children:
+                rel = self._relative_path(current_url, page.url)
+                link = f'<a href="{rel}">{icon}{escape(label)}</a>'
+            elif page and has_children:
                 rel = self._relative_path(current_url, page.url)
                 link = f'<a href="{rel}">{icon}{escape(label)}</a>'
             elif has_children:
@@ -388,7 +396,7 @@ class OKFBuild:
             target = self.page_map.get(accumulated)
             if target:
                 rel = self._relative_path(page.url, accumulated)
-                label = DIR_NAMES.get(part, {}).get(page.lang, part)
+                label = dir_label(part, page.lang)
                 crumbs.append(f'<a href="{rel}">{escape(label)}</a>')
         if crumbs:
             home_rel = self._relative_path(page.url, "/")
