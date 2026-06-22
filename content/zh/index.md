@@ -32,3 +32,7 @@ timestamp: 2026-06-21T10:00:00Z
 ## 📜 最近更新
 
 请查看 [GitHub 提交记录](https://github.com/thomaszta/lowgi-community.github.io/commits/master/) 了解知识库的最新变动。
+
+---
+
+本知识库采用 [Open Knowledge Format (OKF)](https://github.com/GoogleCloudPlatform/knowledge-catalog) v0.1 规范构建。

@@ -32,3 +32,7 @@ This is an **open-source public good project**. Everyone is welcome to contribut
 ## 📜 Recent Updates
 
 See the [changelog](log/) for the latest changes.
+
+---
+
+This knowledge base is built with the [Open Knowledge Format (OKF)](https://github.com/GoogleCloudPlatform/knowledge-catalog) v0.1 specification.
