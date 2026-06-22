@@ -28,5 +28,5 @@ Approximately 53 ± 4 (Low GI, GI ≤ 55)
 
 ## Related Links
 
-- [Oatmeal Berry Bowl](/en/recipes/breakfast/oatmeal-berry-bowl.md)
-- [Greek Yogurt Berry Parfait](/en/recipes/snacks/greek-yogurt-berry-parfait.md)
+- [Oatmeal Berry Bowl](/en/recipes/breakfast/oatmeal-berry-bowl/)
+- [Greek Yogurt Berry Parfait](/en/recipes/snacks/greek-yogurt-berry-parfait/)

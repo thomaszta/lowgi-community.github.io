@@ -36,5 +36,5 @@ The Glycemic Index (GI) is a ranking of carbohydrate-containing foods based on h
 
 ## Related Links
 
-- [Glycemic Load (GL)](/en/concepts/glycemic-load.md) — a more precise assessment tool
+- [Glycemic Load (GL)](/en/concepts/glycemic-load/) — a more precise assessment tool
 - [Food Database](/en/foods/) — look up GI values

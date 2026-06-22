@@ -11,7 +11,7 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## What is a low-GI diet?
 
-A low-GI diet focuses on choosing foods with a Glycemic Index of 55 or lower. See [GI Core Concept](/en/concepts/glycemic-index.md) for details.
+A low-GI diet focuses on choosing foods with a Glycemic Index of 55 or lower. See [GI Core Concept](/en/concepts/glycemic-index/) for details.
 
 ## Is a low-GI diet only for people with diabetes?
 
@@ -27,4 +27,4 @@ Content is referenced from authoritative sources (Harvard Medical School, Chines
 
 ## How can I contribute?
 
-See our [Contributing Guide](/CONTRIBUTING.md).
+See our [Contributing Guide](https://github.com/thomaszta/lowgi-community.github.io/blob/master/CONTRIBUTING.md).

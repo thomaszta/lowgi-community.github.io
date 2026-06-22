@@ -28,5 +28,5 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 相关链接
 
-- [燕麦蓝莓碗食谱](/recipes/breakfast/oatmeal-berry-bowl.md)
-- [希腊酸奶莓果芭菲食谱](/recipes/snacks/greek-yogurt-berry-parfait.md)
+- [燕麦蓝莓碗食谱](/recipes/breakfast/oatmeal-berry-bowl/)
+- [希腊酸奶莓果芭菲食谱](/recipes/snacks/greek-yogurt-berry-parfait/)

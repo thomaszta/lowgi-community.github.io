@@ -49,5 +49,5 @@ Approximately 50-55 (Low GI). The higher the whole wheat flour content, the lowe
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
-- [How to Read Food Labels](/en/guides/how-to-read-food-labels.md)
+- [About GI](/en/concepts/glycemic-index/)
+- [How to Read Food Labels](/en/guides/how-to-read-food-labels/)

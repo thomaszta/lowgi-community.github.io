@@ -40,4 +40,4 @@ This sequence helps slow the post-meal blood sugar rise.
 
 ## Related Links
 
-- [How to Read Food Labels](/en/guides/how-to-read-food-labels.md)
+- [How to Read Food Labels](/en/guides/how-to-read-food-labels/)

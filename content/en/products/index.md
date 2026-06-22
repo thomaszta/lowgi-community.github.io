@@ -30,4 +30,4 @@ To add a new commercial product:
 3. Fill in the complete YAML frontmatter (type, title, brand, description, etc.)
 4. Submit a Pull Request
 
-See [Contributing Guidelines](/CONTRIBUTING.md) for details.
+See [Contributing Guidelines](https://github.com/thomaszta/lowgi-community.github.io/blob/master/CONTRIBUTING.md) for details.

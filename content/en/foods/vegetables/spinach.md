@@ -28,4 +28,4 @@ Approximately 15 (Very low GI)
 
 ## Related Links
 
-- [Egg and Spinach Scramble](/en/recipes/breakfast/egg-and-spinach-scramble.md)
+- [Egg and Spinach Scramble](/en/recipes/breakfast/egg-and-spinach-scramble/)

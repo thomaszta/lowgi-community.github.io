@@ -28,4 +28,4 @@ Approximately 53 ± 4 (Low GI, GI ≤ 55)
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
+- [About GI](/en/concepts/glycemic-index/)

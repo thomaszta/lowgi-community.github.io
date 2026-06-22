@@ -28,4 +28,4 @@ N/A (鸡蛋几乎不含碳水化合物，无GI值)
 
 ## 相关链接
 
-- [鸡蛋菠菜炒食谱](/recipes/breakfast/egg-and-spinach-scramble.md)
+- [鸡蛋菠菜炒食谱](/recipes/breakfast/egg-and-spinach-scramble/)

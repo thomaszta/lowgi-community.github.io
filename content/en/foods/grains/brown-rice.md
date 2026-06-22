@@ -27,4 +27,4 @@ Approximately 66 ± 5 (Medium GI, GI 56-69)
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
+- [About GI](/en/concepts/glycemic-index/)

@@ -30,4 +30,4 @@ timestamp: 2026-06-21T13:00:00Z
 3. 填写完整的 YAML 元数据（type、title、brand、description 等）
 4. 提交 Pull Request
 
-详见 [贡献指南](/CONTRIBUTING.md)。
+详见 [贡献指南](https://github.com/thomaszta/lowgi-community.github.io/blob/master/CONTRIBUTING.md)。

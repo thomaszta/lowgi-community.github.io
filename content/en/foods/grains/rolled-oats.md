@@ -26,5 +26,5 @@ Approximately 55 ± 5 (Low GI, GI ≤ 55)
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
-- [Oatmeal Berry Bowl](/en/recipes/breakfast/oatmeal-berry-bowl.md)
+- [About GI](/en/concepts/glycemic-index/)
+- [Oatmeal Berry Bowl](/en/recipes/breakfast/oatmeal-berry-bowl/)

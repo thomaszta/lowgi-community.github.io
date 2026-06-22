@@ -12,7 +12,7 @@ timestamp: 2026-06-21T11:00:00Z
 ## Ingredients
 
 - Plain Greek yogurt 150g
-- [Blueberries](/en/foods/fruits/blueberry.md) 30g
+- [Blueberries](/en/foods/fruits/blueberry/) 30g
 - Strawberries 3 (sliced)
 - Unsweetened coconut flakes 1 tbsp
 - Chia seeds 1 tsp (optional)

@@ -28,4 +28,4 @@ Approximately 15 (Very low GI)
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
+- [About GI](/en/concepts/glycemic-index/)

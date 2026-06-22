@@ -28,4 +28,4 @@ This knowledge base aims to provide reliable, practical low-GI dietary reference
 
 ## 📜 Recent Updates
 
-See the [changelog](log.md) for the latest changes.
+See the [changelog](log/) for the latest changes.

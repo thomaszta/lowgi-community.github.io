@@ -44,5 +44,5 @@ Ingredients are listed in descending order by weight:
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
-- [Dining Out Tips](/en/guides/dining-out-tips.md)
+- [About GI](/en/concepts/glycemic-index/)
+- [Dining Out Tips](/en/guides/dining-out-tips/)

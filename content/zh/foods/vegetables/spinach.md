@@ -28,4 +28,4 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 相关链接
 
-- [鸡蛋菠菜炒食谱](/recipes/breakfast/egg-and-spinach-scramble.md)
+- [鸡蛋菠菜炒食谱](/recipes/breakfast/egg-and-spinach-scramble/)

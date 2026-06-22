@@ -28,4 +28,4 @@ N/A (Eggs contain virtually no carbohydrates — no GI value)
 
 ## Related Links
 
-- [Egg and Spinach Scramble](/en/recipes/breakfast/egg-and-spinach-scramble.md)
+- [Egg and Spinach Scramble](/en/recipes/breakfast/egg-and-spinach-scramble/)

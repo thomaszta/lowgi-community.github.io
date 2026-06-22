@@ -54,4 +54,4 @@ Approximately 0-5 (Very low GI). The primary component is glucomannan — a solu
 
 ## Related Links
 
-- [About GI](/en/concepts/glycemic-index.md)
+- [About GI](/en/concepts/glycemic-index/)

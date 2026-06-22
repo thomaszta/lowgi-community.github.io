@@ -39,5 +39,5 @@ This shows that eating a moderate amount of watermelon has a limited impact on b
 
 ## Related Links
 
-- [Glycemic Index (GI)](/en/concepts/glycemic-index.md)
+- [Glycemic Index (GI)](/en/concepts/glycemic-index/)
 - [Food Database](/en/foods/)

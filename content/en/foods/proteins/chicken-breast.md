@@ -29,4 +29,4 @@ N/A (Chicken breast contains virtually no carbohydrates — no GI value)
 
 ## Related Links
 
-- [Grilled Chicken Salad](/en/recipes/main-meals/grilled-chicken-salad.md)
+- [Grilled Chicken Salad](/en/recipes/main-meals/grilled-chicken-salad/)

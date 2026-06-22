@@ -11,8 +11,8 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## Ingredients
 
-- [Eggs](/en/foods/proteins/egg.md) 2
-- [Spinach](/en/foods/vegetables/spinach.md) 100g
+- [Eggs](/en/foods/proteins/egg/) 2
+- [Spinach](/en/foods/vegetables/spinach/) 100g
 - Olive oil 1 tsp
 - Salt and black pepper to taste
 - Garlic 1 clove (sliced, optional)

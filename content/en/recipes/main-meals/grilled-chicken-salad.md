@@ -11,11 +11,11 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## Ingredients
 
-- [Chicken breast](/en/foods/proteins/chicken-breast.md) 150g
-- [Broccoli](/en/foods/vegetables/broccoli.md) 100g
+- [Chicken breast](/en/foods/proteins/chicken-breast/) 150g
+- [Broccoli](/en/foods/vegetables/broccoli/) 100g
 - Mixed salad greens 100g
 - Cherry tomatoes 5
-- [Quinoa](/en/foods/grains/quinoa.md) 30g (pre-cooked)
+- [Quinoa](/en/foods/grains/quinoa/) 30g (pre-cooked)
 - Olive oil 2 tsp
 - Lemon juice 1 tbsp
 - Salt, black pepper, rosemary to taste

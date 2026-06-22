@@ -11,8 +11,8 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## Ingredients
 
-- [Rolled oats](/en/foods/grains/rolled-oats.md) 40g
-- [Blueberries](/en/foods/fruits/blueberry.md) 50g
+- [Rolled oats](/en/foods/grains/rolled-oats/) 40g
+- [Blueberries](/en/foods/fruits/blueberry/) 50g
 - Milk (or almond milk) 200ml
 - Walnuts 15g (chopped)
 - Ground cinnamon (optional)
