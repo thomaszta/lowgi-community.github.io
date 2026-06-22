@@ -5,6 +5,7 @@ description: "GI measures how quickly a food raises blood sugar levels — a key
 tags: [GI, blood-sugar, core-concept]
 source: "References from Harvard Medical School and the Chinese Nutrition Society"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Glycemic Index (GI)

@@ -5,6 +5,7 @@ description: "市售低GI饮品产品列表。"
 tags: [低GI, 饮品, 成品食品]
 lang: "zh"
 timestamp: 2026-06-21T13:00:00Z
+source: "社区贡献"
 ---
 
 # 低GI饮品类

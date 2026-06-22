@@ -5,6 +5,7 @@ description: "A low-GI, high-protein main-course salad for lunch or a light dinn
 tags: [main-meal, chicken, salad, low-GI, high-protein]
 source: "Community-verified recipe"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Grilled Chicken Salad

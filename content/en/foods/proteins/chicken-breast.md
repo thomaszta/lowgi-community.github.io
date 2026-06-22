@@ -5,6 +5,7 @@ description: "A high-protein, low-carbohydrate quality protein source with virtu
 tags: [protein, meat, low-GI, high-protein, low-carb]
 source: "References from Open Food Facts"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Chicken Breast

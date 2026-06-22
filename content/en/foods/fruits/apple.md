@@ -5,6 +5,7 @@ description: "A low-GI fruit rich in soluble fiber and antioxidants."
 tags: [fruit, low-GI, high-fiber, vitamins]
 source: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Apple

@@ -5,6 +5,7 @@ description: "Common questions about low-GI eating and this knowledge base."
 tags: [FAQ, community, help]
 source: "Community contributions"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Frequently Asked Questions

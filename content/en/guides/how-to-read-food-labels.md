@@ -5,6 +5,7 @@ description: "Learn to understand nutrition facts panels and ingredient lists to
 tags: [guide, food-labels, shopping, nutrition]
 source: "References from FDA Nutrition Facts guidelines"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # How to Read Food Labels

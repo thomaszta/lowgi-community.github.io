@@ -5,6 +5,7 @@ description: "A low-GI breakfast built on rolled oats, fresh blueberries, and nu
 tags: [breakfast, oatmeal, blueberry, low-GI, high-fiber]
 source: "Community-verified recipe"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Oatmeal Berry Bowl

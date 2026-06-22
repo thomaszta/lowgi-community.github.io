@@ -5,6 +5,7 @@ description: "A high-protein, low-carb quick breakfast ready in 5 minutes."
 tags: [breakfast, egg, spinach, low-GI, high-protein, quick]
 source: "Community-verified recipe"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Egg and Spinach Scramble

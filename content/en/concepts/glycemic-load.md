@@ -5,6 +5,7 @@ description: "GL combines GI value and carbohydrate content for a more accurate 
 tags: [GL, blood-sugar, core-concept]
 source: "References from Harvard Medical School and the Chinese Nutrition Society"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Glycemic Load (GL)

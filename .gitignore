@@ -2,6 +2,8 @@
 .obsidian/
 site/
 docs/
+__pycache__/
+*.pyc
 
 # Private / process docs - not published to the public repo
 低GI 社区 方案（第一阶段）.md

@@ -5,6 +5,7 @@ description: "保留麸皮和胚芽的全谷物大米，GI值低于白米饭。"
 tags: [谷物, 主食, 中GI, 全谷物]
 source: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
 timestamp: 2026-06-21T11:00:00Z
+lang: "zh"
 ---
 
 # 糙米

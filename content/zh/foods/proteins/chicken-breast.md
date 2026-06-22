@@ -5,6 +5,7 @@ description: "高蛋白质、低碳水化合物的优质蛋白质来源，几乎
 tags: [蛋白质, 肉类, 低GI, 高蛋白, 低碳水]
 source: "参考 Open Food Facts 数据"
 timestamp: 2026-06-21T11:00:00Z
+lang: "zh"
 ---
 
 # 鸡胸肉

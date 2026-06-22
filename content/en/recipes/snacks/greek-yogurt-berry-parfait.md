@@ -5,6 +5,7 @@ description: "A high-protein, low-carb layered dessert that satisfies sweet crav
 tags: [snack, yogurt, berry, low-GI, high-protein]
 source: "Community-verified recipe"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Greek Yogurt Berry Parfait

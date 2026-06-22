@@ -2,8 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   workflow_dispatch:
 
 permissions:
@@ -27,16 +26,13 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install mkdocs mkdocs-material
+        run: pip install -r requirements.txt
 
-      - name: Copy content to docs
-        run: cp -r content/zh/* docs/
-
-      - name: Build site
-        run: mkdocs build
+      - name: Build static site
+        run: python build.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

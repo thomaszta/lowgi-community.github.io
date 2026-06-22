@@ -10,18 +10,85 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check for required 'type:' field
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Check OKF frontmatter
         run: |
-          errors=0
-          for file in $(git diff --name-only --diff-filter=AM ${{ github.event.pull_request.base.sha }}...HEAD | grep '\.md$' | grep -v 'index.md' | grep -v 'log.md'); do
-            echo "Checking $file..."
-            if ! grep -q "^type:" "$file"; then
-              echo "Error: File '$file' is missing a 'type:' field in its frontmatter."
-              errors=$((errors + 1))
-            fi
-          done
-          if [ $errors -gt 0 ]; then
-            echo "Found $errors file(s) missing required 'type:' field."
-            exit 1
-          fi
-          echo "All required files have a 'type:' field."
+          python3 << 'EOF'
+          import os, sys, yaml
+
+          errors = []
+          VALID_TYPES = {"Concept", "Food", "Recipe", "Guide", "FAQ", "Product", "Product Category", "Knowledge Base Home"}
+
+          base_sha = "${{ github.event.pull_request.base.sha }}" if "${{ github.event.pull_request.base.sha }}" else "HEAD~1"
+
+          changed = os.popen(f'git diff --name-only --diff-filter=AM {base_sha}...HEAD').read().strip().split('\n')
+          changed = [f for f in changed if f.endswith('.md') and f.startswith('content/')]
+
+          if not changed:
+              print("No markdown files changed.")
+              sys.exit(0)
+
+          for fp in changed:
+              fname = os.path.basename(fp)
+              if fname in ('log.md',):
+                  continue
+
+              with open(fp, 'r') as f:
+                  raw = f.read()
+
+              if not raw.startswith('---'):
+                  continue
+
+              parts = raw.split('---', 2)
+              if len(parts) < 3:
+                  errors.append(f"{fp}: Invalid frontmatter (no closing ---)")
+                  continue
+
+              try:
+                  fm = yaml.safe_load(parts[1])
+              except yaml.YAMLError as e:
+                  errors.append(f"{fp}: YAML parse error: {e}")
+                  continue
+
+              if not fm or not isinstance(fm, dict):
+                  errors.append(f"{fp}: Empty or invalid frontmatter")
+                  continue
+
+              req = ['type', 'title', 'description', 'tags', 'timestamp']
+              for field in req:
+                  if field not in fm:
+                      errors.append(f"{fp}: Missing required field '{field}'")
+
+              if fm.get('type') not in VALID_TYPES:
+                  errors.append(f"{fp}: Invalid type '{fm.get('type')}'. Must be one of: {', '.join(sorted(VALID_TYPES))}")
+
+              if 'lang' not in fm:
+                  errors.append(f"{fp}: Missing 'lang' field")
+
+              if fm.get('type') not in ('Knowledge Base Home', 'Product Category') and 'source' not in fm:
+                  errors.append(f"{fp}: Missing 'source' field for type '{fm.get('type')}'")
+
+              if fm.get('type') == 'Product':
+                  if 'brand' not in fm:
+                      errors.append(f"{fp}: Missing 'brand' field for Product")
+                  if 'gi_value' not in fm:
+                      errors.append(f"{fp}: Missing 'gi_value' field for Product")
+
+          if errors:
+              print("❌ Validation errors found:")
+              for e in errors:
+                  print(f"  - {e}")
+              sys.exit(1)
+          else:
+              print("✅ All files pass OKF validation.")
+          EOF

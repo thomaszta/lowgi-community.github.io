@@ -5,6 +5,7 @@ description: "浆果类中的低GI水果，富含花青素和抗氧化物质。"
 tags: [水果, 低GI, 浆果, 抗氧化]
 source: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
 timestamp: 2026-06-21T11:00:00Z
+lang: "zh"
 ---
 
 # 蓝莓

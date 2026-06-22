@@ -5,6 +5,7 @@ description: "A high-protein, high-fiber pseudocereal and an excellent low-GI st
 tags: [grain, staple, low-GI, high-protein]
 source: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
 timestamp: 2026-06-21T11:00:00Z
+lang: "en"
 ---
 
 # Quinoa

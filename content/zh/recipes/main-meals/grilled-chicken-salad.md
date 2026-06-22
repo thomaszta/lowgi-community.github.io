@@ -5,6 +5,7 @@ description: "低GI高蛋白的正餐沙拉，适合午餐或轻食晚餐。"
 tags: [正餐, 鸡肉, 沙拉, 低GI, 高蛋白]
 source: "社区验证食谱"
 timestamp: 2026-06-21T11:00:00Z
+lang: "zh"
 ---
 
 # 烤鸡沙拉
