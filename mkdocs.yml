@@ -1,56 +1,44 @@
-site_name: 低GI食谱知识库 / Low-GI Recipe Knowledge Base
-site_description: Open-source low-GI food and recipe knowledge base for diabetes
+site_name: 低GI食谱知识库
+site_description: 面向糖尿病人的开源低GI食谱与食品知识库
 site_url: https://thomaszta.github.io/lowgi-community.github.io/
 repo_url: https://github.com/thomaszta/lowgi-community.github.io
 
 theme:
   name: material
-  language: en
+  language: zh
   features:
     - navigation.tabs
     - navigation.indexes
 
 plugins:
   - search
-  - i18n:
-      default_language: zh
-      languages:
-        zh:
-          name: 简体中文
-          build: true
-        en:
-          name: English
-          build: true
 
 nav:
-  - Home: index.md
-  - Core Concepts:
-      - glycemic-index.md
-      - glycemic-load.md
-  - Food Database:
-      - Grains: foods/grains/rolled-oats.md
+  - 首页: index.md
+  - 核心概念:
+      - concepts/glycemic-index.md
+      - concepts/glycemic-load.md
+  - 食材库:
+      - foods/grains/rolled-oats.md
       - foods/grains/brown-rice.md
       - foods/grains/quinoa.md
-      - Vegetables: foods/vegetables/broccoli.md
+      - foods/vegetables/broccoli.md
       - foods/vegetables/spinach.md
-      - Fruits: foods/fruits/apple.md
+      - foods/fruits/apple.md
       - foods/fruits/blueberry.md
-      - Proteins: foods/proteins/chicken-breast.md
+      - foods/proteins/chicken-breast.md
       - foods/proteins/egg.md
       - foods/proteins/tofu.md
-  - Recipe Collection:
-      - Breakfast:
-          - recipes/breakfast/oatmeal-berry-bowl.md
-          - recipes/breakfast/egg-and-spinach-scramble.md
-      - Main Meals:
-          - recipes/main-meals/grilled-chicken-salad.md
-      - Snacks:
-          - recipes/snacks/greek-yogurt-berry-parfait.md
-  - Commercial Products:
+  - 食谱库:
+      - recipes/breakfast/oatmeal-berry-bowl.md
+      - recipes/breakfast/egg-and-spinach-scramble.md
+      - recipes/main-meals/grilled-chicken-salad.md
+      - recipes/snacks/greek-yogurt-berry-parfait.md
+  - 低GI成品食品:
       - products/index.md
-      - Breads: products/breads/whole-wheat-bread.md
-      - Noodles: products/noodles/konjac-noodles.md
-  - Practical Guides:
+      - products/breads/whole-wheat-bread.md
+      - products/noodles/konjac-noodles.md
+  - 实用指南:
       - guides/how-to-read-food-labels.md
       - guides/dining-out-tips.md
-  - Community: community/faq.md
+  - 社区: community/faq.md
