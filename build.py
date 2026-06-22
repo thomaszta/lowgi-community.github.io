@@ -497,6 +497,8 @@ class OKFBuild:
         errors = []
         for page in self.pages:
             html = self.render_html(page)
+            # Remove script tags to avoid false positives from JS templates
+            html = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL)
             page_dir = os.path.join(OUTPUT_DIR, page.url.lstrip("/"))
             for m in re.finditer(r'<a\s+href="([^"]+)"', html):
                 href = m.group(1)
@@ -529,7 +531,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
+    <button class="menu-toggle" aria-label="Toggle navigation">☰<span>菜单</span></button>
     <a href="{{LOGO_HREF}}" class="logo">低GI知识库</a>
     <nav class="lang-nav">
       {{LANG_SWITCH}}
@@ -555,6 +557,83 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   function toggle(){ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); }
   btn.addEventListener('click', toggle);
   overlay.addEventListener('click', toggle);
+})();
+
+/* Search functionality */
+(function(){
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  if (!searchInput || !searchResults) return;
+
+  var isZh = document.documentElement.lang === 'zh';
+
+  var pageIndex = isZh ? [
+    {t:'血糖生成指数 (GI)', d:'GI是衡量食物引起血糖升高程度的指标', u:'concepts/glycemic-index/', type:'概念'},
+    {t:'血糖负荷 (GL)', d:'GL综合考虑GI和份量，更准确评估食物对血糖的影响', u:'concepts/glycemic-load/', type:'概念'},
+    {t:'燕麦片', d:'低GI谷物，富含β-葡聚糖', u:'foods/grains/rolled-oats/', type:'食材'},
+    {t:'糙米', d:'全谷物，GI比白米低', u:'foods/grains/brown-rice/', type:'食材'},
+    {t:'藜麦', d:'高蛋白假谷物，GI低', u:'foods/grains/quinoa/', type:'食材'},
+    {t:'鹰嘴豆', d:'高蛋白高纤维豆类，GI极低', u:'foods/legumes/chickpeas/', type:'食材'},
+    {t:'苹果', d:'纤维丰富的水果，GI低', u:'foods/fruits/apple/', type:'食材'},
+    {t:'蓝莓', d:'抗氧化 berries，GI低', u:'foods/fruits/blueberry/', type:'食材'},
+    {t:'西兰花', d:'十字花科蔬菜，GI极低', u:'foods/vegetables/broccoli/', type:'食材'},
+    {t:'菠菜', d:'绿叶蔬菜，对血糖影响极小', u:'foods/vegetables/spinach/', type:'食材'},
+    {t:'鸡胸肉', d:'瘦蛋白，GI为零', u:'foods/proteins/chicken-breast/', type:'食材'},
+    {t:'鸡蛋', d:'完整蛋白，GI极低', u:'foods/proteins/egg/', type:'食材'},
+    {t:'豆腐', d:'植物蛋白，GI低', u:'foods/proteins/tofu/', type:'食材'},
+    {t:'燕麦蓝莓碗', d:'高纤维早餐食谱', u:'recipes/breakfast/oatmeal-berry-bowl/', type:'食谱'},
+    {t:'鸡蛋菠菜炒', d:'快手早餐食谱', u:'recipes/breakfast/egg-and-spinach-scramble/', type:'食谱'},
+    {t:'烤鸡沙拉', d:'低GI正餐食谱', u:'recipes/main-meals/grilled-chicken-salad/', type:'食谱'},
+    {t:'希腊酸奶芭菲', d:'健康小食食谱', u:'recipes/snacks/greek-yogurt-berry-parfait/', type:'食谱'},
+    {t:'如何读食品标签', d:'选购低GI食品的技巧', u:'guides/how-to-read-food-labels/', type:'指南'},
+    {t:'外出就餐指南', d:'餐厅点餐小技巧', u:'guides/dining-out-tips/', type:'指南'},
+    {t:'常见问题', d:'关于低GI饮食的FAQ', u:'community/faq/', type:'社区'},
+  ] : [
+    {t:'Glycemic Index (GI)', d:'GI measures how quickly a food raises blood sugar', u:'en/concepts/glycemic-index/', type:'Concept'},
+    {t:'Glycemic Load (GL)', d:'GL considers both GI and serving size for accurate impact', u:'en/concepts/glycemic-load/', type:'Concept'},
+    {t:'Rolled Oats', d:'Low-GI grain rich in beta-glucan', u:'en/foods/grains/rolled-oats/', type:'Food'},
+    {t:'Brown Rice', d:'Whole grain with lower GI than white rice', u:'en/foods/grains/brown-rice/', type:'Food'},
+    {t:'Quinoa', d:'High-protein pseudograin, low GI', u:'en/foods/grains/quinoa/', type:'Food'},
+    {t:'Chickpeas', d:'High-protein, high-fiber legume, very low GI', u:'en/foods/legumes/chickpeas/', type:'Food'},
+    {t:'Apple', d:'Fiber-rich fruit with low GI', u:'en/foods/fruits/apple/', type:'Food'},
+    {t:'Blueberry', d:'Antioxidant-rich berry, low GI', u:'en/foods/fruits/blueberry/', type:'Food'},
+    {t:'Broccoli', d:'Cruciferous vegetable, very low GI', u:'en/foods/vegetables/broccoli/', type:'Food'},
+    {t:'Spinach', d:'Leafy green with minimal blood sugar impact', u:'en/foods/vegetables/spinach/', type:'Food'},
+    {t:'Chicken Breast', d:'Lean protein, zero GI', u:'en/foods/proteins/chicken-breast/', type:'Food'},
+    {t:'Egg', d:'Complete protein, very low GI', u:'en/foods/proteins/egg/', type:'Food'},
+    {t:'Tofu', d:'Plant-based protein, low GI', u:'en/foods/proteins/tofu/', type:'Food'},
+    {t:'Oatmeal Berry Bowl', d:'High-fiber breakfast recipe', u:'en/recipes/breakfast/oatmeal-berry-bowl/', type:'Recipe'},
+    {t:'Egg and Spinach Scramble', d:'Quick breakfast recipe', u:'en/recipes/breakfast/egg-and-spinach-scramble/', type:'Recipe'},
+    {t:'Grilled Chicken Salad', d:'Low-GI main meal recipe', u:'en/recipes/main-meals/grilled-chicken-salad/', type:'Recipe'},
+    {t:'Greek Yogurt Berry Parfait', d:'Healthy snack recipe', u:'en/recipes/snacks/greek-yogurt-berry-parfait/', type:'Recipe'},
+    {t:'How to Read Food Labels', d:'Tips for choosing low-GI foods', u:'en/guides/how-to-read-food-labels/', type:'Guide'},
+    {t:'Dining Out Tips', d:'Restaurant ordering tips', u:'en/guides/dining-out-tips/', type:'Guide'},
+    {t:'FAQ', d:'Frequently asked questions about low-GI diet', u:'en/community/faq/', type:'Community'},
+  ];
+
+  searchInput.addEventListener('input', function(){
+    var q = this.value.trim();
+    if (q.length < 1) { searchResults.classList.remove('show'); return; }
+    var qLower = q.toLowerCase();
+    var hits = pageIndex.filter(function(p){
+      return p.t.toLowerCase().indexOf(qLower) !== -1 || p.d.toLowerCase().indexOf(qLower) !== -1;
+    }).slice(0, 8);
+
+    if (hits.length === 0) {
+      searchResults.innerHTML = '<div class="search-no-result">' + (isZh ? '未找到相关结果' : 'No results found') + '</div>';
+    } else {
+      searchResults.innerHTML = hits.map(function(p){
+        return '<div class="search-result-item"><a href="' + p.u + '"><div class="result-title">' + p.t + '</div><div class="result-type">' + p.type + ' · ' + p.d.substring(0, 30) + '</div></a></div>';
+      }).join('');
+    }
+    searchResults.classList.add('show');
+  });
+
+  document.addEventListener('click', function(e){
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.classList.remove('show');
+    }
+  });
 })();
 </script>
 <footer class="site-footer">
