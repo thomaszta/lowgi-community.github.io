@@ -54,8 +54,15 @@ nav:
       - recipes/snacks/greek-yogurt-berry-parfait.md
   - Commercial Products:
       - products/index.md
-      - products/breads/whole-wheat-bread.md
-      - products/noodles/konjac-noodles.md
+      - Breads:
+          - products/breads/index.md
+          - products/breads/whole-wheat-bread.md
+      - Noodles:
+          - products/noodles/index.md
+          - products/noodles/konjac-noodles.md
+      - products/snacks/index.md
+      - products/beverages/index.md
+      - products/condiments/index.md
   - Practical Guides:
       - guides/how-to-read-food-labels.md
       - guides/dining-out-tips.md
