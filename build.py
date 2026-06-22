@@ -28,6 +28,7 @@ DIR_NAMES = {
     "community": { "zh": "社区", "en": "Community" },
     "products": { "zh": "成品食品", "en": "Products" },
     "grains": { "zh": "谷类", "en": "Grains" },
+    "legumes": { "zh": "豆类", "en": "Legumes" },
     "vegetables": { "zh": "蔬菜", "en": "Vegetables" },
     "fruits": { "zh": "水果", "en": "Fruits" },
     "proteins": { "zh": "蛋白质", "en": "Proteins" },
@@ -43,6 +44,7 @@ DIR_NAMES = {
 TYPE_ICONS = {
     "Concept": "🧠",
     "Food": "🥗",
+    "Food Category": "📁",
     "Recipe": "🍳",
     "Guide": "📖",
     "FAQ": "❓",
