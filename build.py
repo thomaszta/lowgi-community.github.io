@@ -478,6 +478,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header class="site-header">
   <div class="header-inner">
+    <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
     <a href="{{LOGO_HREF}}" class="logo">低GI知识库</a>
     <nav class="lang-nav">
       {{LANG_SWITCH}}
@@ -485,7 +486,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
 </header>
 <div class="layout">
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
     <nav class="sidebar-nav">
       {{NAV}}
     </nav>
@@ -494,6 +496,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     {{CONTENT}}
   </main>
 </div>
+<script>
+(function(){
+  var btn = document.querySelector('.menu-toggle');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+  function toggle(){ sidebar.classList.toggle('open'); overlay.classList.toggle('show'); }
+  btn.addEventListener('click', toggle);
+  overlay.addEventListener('click', toggle);
+})();
+</script>
 <footer class="site-footer">
   <div class="footer-inner">
     <p>低GI社区知识库 &copy; {{YEAR}} | <a href="https://github.com/thomaszta/lowgi-community.github.io">GitHub</a></p>
