@@ -21,10 +21,13 @@ This knowledge base aims to provide reliable, practical low-GI dietary reference
 - **Practical Guides** ([guides/](guides/)): Master shopping, cooking, and dining-out tips.
 - **Community** ([community/](community/)): Check FAQs and contributor stories.
 
-## 🌐 Languages
+## 🌟 Get Involved
 
-- [English](/en/)
-- [中文](/)
+This is an **open-source public good project**. Everyone is welcome to contribute:
+
+- 🐛 Submit an [Issue](https://github.com/thomaszta/lowgi-community.github.io/issues) for feedback or suggestions
+- 📝 Open a [Pull Request](https://github.com/thomaszta/lowgi-community.github.io/pulls) to add new foods, recipes, or products
+- ⭐ Star the project on [GitHub](https://github.com/thomaszta/lowgi-community.github.io) to help others discover it
 
 ## 📜 Recent Updates
 
