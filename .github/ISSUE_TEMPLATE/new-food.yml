@@ -1,0 +1,43 @@
+name: "🥗 添加新食材 / New Food"
+description: 提交一种新食材的 GI 信息 / Submit a new food with GI information
+labels: ["new-food"]
+body:
+  - type: input
+    id: name-zh
+    attributes:
+      label: 食材中文名
+      description: 例如「红薯」「藜麦」
+    validations:
+      required: true
+  - type: input
+    id: name-en
+    attributes:
+      label: Food Name (English)
+      description: e.g. "Sweet Potato", "Quinoa"
+    validations:
+      required: true
+  - type: input
+    id: gi
+    attributes:
+      label: GI 值 / GI Value
+      description: 预估 GI 值及范围，如 "54 ± 5"
+    validations:
+      required: true
+  - type: textarea
+    id: nutrition
+    attributes:
+      label: 营养特点 / Nutritional Profile
+      description: 蛋白质、纤维、脂肪等关键信息
+      value: |
+        - 蛋白质：
+        - 膳食纤维：
+        - 脂肪：
+    validations:
+      required: false
+  - type: textarea
+    id: source
+    attributes:
+      label: 参考来源 / References
+      description: 数据来源链接或文献
+    validations:
+      required: true

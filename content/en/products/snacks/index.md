@@ -4,6 +4,7 @@ title: "Low-GI Snacks"
 description: "Commercially available low-GI snack products."
 tags: [low-GI, snacks, commercial-products]
 lang: "en"
+source: "Community contributions"
 timestamp: 2026-06-21T13:00:00Z
 ---
 

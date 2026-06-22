@@ -29,5 +29,5 @@ Approximately 28 ± 5 (Low GI, GI ≤ 55)
 
 ## Related Links
 
-- [About GI](../concepts/glycemic-index/)
-- [Food Database](../foods/grains/rolled-oats/)
+- [About GI](../../concepts/glycemic-index/)
+- [Food Database](../grains/rolled-oats/)

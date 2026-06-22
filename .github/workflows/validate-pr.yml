@@ -21,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml
 
+      - name: Install full build dependencies
+        run: pip install pyyaml markdown
+
+      - name: Build site and check links
+        run: python build.py --check-links
+
       - name: Check OKF frontmatter
         run: |
           python3 << 'EOF'

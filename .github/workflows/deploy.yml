@@ -32,7 +32,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build static site
-        run: python build.py
+        run: python build.py --check-links
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://thomaszta.github.io/lowgi-community.github.io' }}
 

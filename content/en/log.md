@@ -1,3 +1,12 @@
+---
+type: "Log"
+title: "Changelog"
+description: "Update history of the Low-GI Knowledge Base"
+tags: [log, changelog]
+lang: "en"
+timestamp: 2026-06-21T10:00:00Z
+---
+
 # Changelog
 
 ## 2026-06-21

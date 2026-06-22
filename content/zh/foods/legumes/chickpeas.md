@@ -29,5 +29,5 @@ timestamp: 2026-06-22T15:00:00Z
 
 ## 相关链接
 
-- [关于GI值的概念](../concepts/glycemic-index/)
-- [食材库](../foods/grains/rolled-oats/)
+- [关于GI值的概念](../../concepts/glycemic-index/)
+- [食材库](../grains/rolled-oats/)

@@ -6,6 +6,7 @@ Reads OKF (Open Knowledge Format) markdown files and generates a clean static HT
 
 import os
 import re
+import sys
 import shutil
 import json
 from datetime import datetime
@@ -440,29 +441,79 @@ class OKFBuild:
             shutil.copytree(assets_src, assets_dst)
 
         self._write_404()
+        self._write_sitemap()
 
         print(f"✅ 生成完成: {len(self.pages)} 页面 → {OUTPUT_DIR}/")
 
     def _write_404(self):
-        html = HTML_TEMPLATE.replace("{{LANG}}", "zh")
-        html = html.replace("{{LOGO_HREF}}", "./")
-        html = html.replace("{{CSS_HREF}}", "assets/css/style.css")
-        html = html.replace("{{FAVICON_HREF}}", "assets/favicon.ico")
-        html = html.replace("{{SITE_URL}}", SITE_URL)
-        html = html.replace("{{TITLE}}", "页面未找到")
-        html = html.replace("{{DESC}}", "404 - 页面未找到")
-        html = html.replace("{{NAV}}", self.nav_to_html(self.build_nav_tree("zh"), "zh", "/"))
-        html = html.replace("{{LANG_SWITCH}}", '<a href="en/" class="lang-link">English</a>')
-        html = html.replace("{{CONTENT}}", """
-        <div class="error-page">
+        nav_html_zh = self.nav_to_html(self.build_nav_tree("zh"), "zh", "/")
+        nav_html_en = self.nav_to_html(self.build_nav_tree("en"), "en", "/en/")
+        body = """
+        <div class="error-page" id="error-zh">
           <h1>404</h1>
           <p>页面未找到</p>
           <a href="./" class="btn">返回首页</a>
         </div>
-        """)
+        <div class="error-page" id="error-en" style="display:none">
+          <h1>404</h1>
+          <p>Page Not Found</p>
+          <a href="en/" class="btn">Back to Home</a>
+        </div>
+        <script>
+        (function(){
+          if (location.pathname.indexOf('/en/') !== -1) {
+            document.getElementById('error-zh').style.display='none';
+            document.getElementById('error-en').style.display='block';
+          }
+        })();
+        </script>
+        """
+        html = HTML_TEMPLATE
+        html = html.replace("{{LANG}}", "zh")
+        html = html.replace("{{LOGO_HREF}}", "./")
+        html = html.replace("{{CSS_HREF}}", "assets/css/style.css")
+        html = html.replace("{{FAVICON_HREF}}", "assets/favicon.svg")
+        html = html.replace("{{SITE_URL}}", SITE_URL)
+        html = html.replace("{{TITLE}}", "404 — Page Not Found")
+        html = html.replace("{{DESC}}", "404 — Page Not Found")
+        html = html.replace("{{NAV}}", nav_html_zh)
+        html = html.replace("{{LANG_SWITCH}}", '<a href="en/" class="lang-link">English</a>')
+        html = html.replace("{{CONTENT}}", body)
         html = html.replace("{{YEAR}}", str(datetime.now().year))
         with open(os.path.join(OUTPUT_DIR, "404.html"), "w", encoding="utf-8") as f:
             f.write(html)
+
+    def _write_sitemap(self):
+        urls = []
+        for page in self.pages:
+            urls.append(f"  <url><loc>{SITE_URL}{page.url}</loc></url>")
+        xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        xml += "\n".join(urls)
+        xml += "\n</urlset>\n"
+        with open(os.path.join(OUTPUT_DIR, "sitemap.xml"), "w", encoding="utf-8") as f:
+            f.write(xml)
+
+    def check_links(self):
+        errors = []
+        for page in self.pages:
+            html = self.render_html(page)
+            page_dir = os.path.join(OUTPUT_DIR, page.url.lstrip("/"))
+            for m in re.finditer(r'<a\s+href="([^"]+)"', html):
+                href = m.group(1)
+                if href.startswith("http") or href.startswith("#") or href.startswith("mailto:"):
+                    continue
+                resolved = os.path.normpath(os.path.join(page_dir, href))
+                if os.path.isdir(resolved):
+                    resolved = os.path.join(resolved, "index.html")
+                elif not resolved.endswith(".html"):
+                    resolved = resolved + "/index.html"
+                if not os.path.isfile(resolved):
+                    errors.append(f"  {page.url:40s} → {href:40s}")
+        if errors:
+            print(f"\n❌ {len(errors)} broken link(s):\n" + "\n".join(errors))
+            return False
+        print("✅ All internal links are valid")
+        return True
 
 
 HTML_TEMPLATE = """<!DOCTYPE html>
@@ -473,7 +524,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESC}}">
 <link rel="stylesheet" href="{{CSS_HREF}}">
-<link rel="icon" href="{{FAVICON_HREF}}" type="image/x-icon">
+<link rel="icon" href="{{FAVICON_HREF}}" type="image/svg+xml">
 </head>
 <body>
 <header class="site-header">
@@ -516,10 +567,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="OKF Static Site Generator")
+    parser.add_argument("--check-links", action="store_true", help="Check for broken internal links")
+    args = parser.parse_args()
+
     build = OKFBuild()
     build.collect_pages()
     build.write_site()
     print("✅ 构建成功!")
+
+    if args.check_links:
+        ok = build.check_links()
+        if not ok:
+            sys.exit(1)
 
 
 if __name__ == "__main__":

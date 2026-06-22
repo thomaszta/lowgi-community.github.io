@@ -4,6 +4,7 @@ title: "Low-GI Commercial Products"
 description: "A collection of commercially available low-GI packaged foods, including breads, noodles, snacks, beverages, and condiments."
 tags: [low-GI, commercial-products, packaged-food]
 lang: "en"
+source: "Community contributions"
 timestamp: 2026-06-21T13:00:00Z
 ---
 

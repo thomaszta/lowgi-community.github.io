@@ -4,6 +4,7 @@ title: "Low-GI Beverages"
 description: "Commercially available low-GI beverage products."
 tags: [low-GI, beverages, commercial-products]
 lang: "en"
+source: "Community contributions"
 timestamp: 2026-06-21T13:00:00Z
 ---
 

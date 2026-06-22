@@ -1,0 +1,25 @@
+name: "🐛 问题反馈 / Bug Report"
+description: 报告网站问题或内容错误 / Report a site issue or content error
+labels: ["bug"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: 页面链接 / Page URL
+      description: 有问题的页面地址
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述 / Description
+      description: 发生了什么问题？
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为 / Expected Behavior
+      description: 应该是什么样的？
+    validations:
+      required: false

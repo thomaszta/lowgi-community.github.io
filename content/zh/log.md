@@ -1,3 +1,12 @@
+---
+type: "Log"
+title: "更新日志"
+description: "低GI知识库的更新历史"
+tags: [日志, 更新]
+lang: "zh"
+timestamp: 2026-06-21T10:00:00Z
+---
+
 # 知识库更新日志
 
 ## 2026-06-21
