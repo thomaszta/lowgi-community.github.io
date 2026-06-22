@@ -30,15 +30,10 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: pip install mkdocs mkdocs-material mkdocs-i18n
+        run: pip install mkdocs mkdocs-material
 
-      - name: Prepare content for MkDocs
-        run: |
-          # Default language (zh) at docs/ root
-          cp -r content/zh/* docs/
-          # Other languages in subdirectories
-          mkdir -p docs/en
-          cp -r content/en/* docs/en/
+      - name: Copy content to docs
+        run: cp -r content/zh/* docs/
 
       - name: Build site
         run: mkdocs build
