@@ -40,4 +40,4 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 相关链接
 
-- [如何阅读食品标签](/zh/guides/how-to-read-food-labels.md)
+- [如何阅读食品标签](/guides/how-to-read-food-labels.md)

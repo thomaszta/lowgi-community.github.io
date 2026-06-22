@@ -26,5 +26,5 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 相关链接
 
-- [关于GI值的概念](/zh/concepts/glycemic-index.md)
-- [燕麦蓝莓碗食谱](/zh/recipes/breakfast/oatmeal-berry-bowl.md)
+- [关于GI值的概念](/concepts/glycemic-index.md)
+- [燕麦蓝莓碗食谱](/recipes/breakfast/oatmeal-berry-bowl.md)

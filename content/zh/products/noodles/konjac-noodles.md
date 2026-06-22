@@ -54,4 +54,4 @@ timestamp: 2026-06-21T13:00:00Z
 
 ## 相关链接
 
-- [关于GI值的概念](/zh/concepts/glycemic-index.md)
+- [关于GI值的概念](/concepts/glycemic-index.md)

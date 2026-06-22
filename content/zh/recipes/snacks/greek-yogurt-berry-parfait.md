@@ -12,7 +12,7 @@ timestamp: 2026-06-21T11:00:00Z
 ## 用料
 
 - 希腊酸奶 150g
-- [蓝莓](/zh/foods/fruits/blueberry.md) 30g
+- [蓝莓](/foods/fruits/blueberry.md) 30g
 - 草莓 3颗（切片）
 - 无糖椰子片 1汤匙
 - 奇亚籽 1茶匙（可选）

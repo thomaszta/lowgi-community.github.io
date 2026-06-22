@@ -24,7 +24,7 @@ This knowledge base aims to provide reliable, practical low-GI dietary reference
 ## 🌐 Languages
 
 - [English](/en/)
-- [中文](/zh/)
+- [中文](/)
 
 ## 📜 Recent Updates
 

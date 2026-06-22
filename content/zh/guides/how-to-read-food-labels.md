@@ -44,5 +44,5 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 相关链接
 
-- [关于GI值的概念](/zh/concepts/glycemic-index.md)
-- [外出就餐小贴士](/zh/guides/dining-out-tips.md)
+- [关于GI值的概念](/concepts/glycemic-index.md)
+- [外出就餐小贴士](/guides/dining-out-tips.md)

@@ -11,7 +11,7 @@ timestamp: 2026-06-21T11:00:00Z
 
 ## 什么是低GI饮食？
 
-低GI饮食是指选择血糖生成指数（GI）≤ 55 的食物为主的饮食方式。详见[GI核心概念](/zh/concepts/glycemic-index.md)。
+低GI饮食是指选择血糖生成指数（GI）≤ 55 的食物为主的饮食方式。详见[GI核心概念](/concepts/glycemic-index.md)。
 
 ## 低GI饮食只适合糖尿病人吗？
 

@@ -29,4 +29,4 @@ N/A (鸡胸肉几乎不含碳水化合物，无GI值)
 
 ## 相关链接
 
-- [烤鸡沙拉食谱](/zh/recipes/main-meals/grilled-chicken-salad.md)
+- [烤鸡沙拉食谱](/recipes/main-meals/grilled-chicken-salad.md)

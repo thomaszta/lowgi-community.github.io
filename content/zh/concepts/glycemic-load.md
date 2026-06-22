@@ -39,5 +39,5 @@ GL值同时考虑食物的GI值和实际碳水化合物摄入量，公式为：
 
 ## 相关链接
 
-- [血糖生成指数 (GI)](/zh/concepts/glycemic-index.md)
-- [食材库](/zh/foods/) — 查询食物的GI和GL值
+- [血糖生成指数 (GI)](/concepts/glycemic-index.md)
+- [食材库](/foods/) — 查询食物的GI和GL值
