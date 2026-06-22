@@ -1,6 +1,7 @@
 .DS_Store
 .obsidian/
 site/
+docs/
 
 # Private / process docs - not published to the public repo
 低GI 社区 方案（第一阶段）.md
