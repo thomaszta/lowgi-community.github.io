@@ -318,9 +318,40 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
     background: rgba(0,0,0,0.3);
     z-index: 98;
   }
-  .sidebar-overlay.show { display: block; }
+.sidebar-overlay.show { display: block; }
 
-  .main-content { padding: 20px 16px; }
+.main-content { padding: 20px 16px; padding-bottom: 80px; }
+
+/* Mobile Bottom Nav */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 16px;
+}
+.bottom-nav.show { display: flex; }
+.bottom-nav a, .bottom-nav button {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; flex: 1;
+  padding: 8px; font-size: 11px;
+  color: var(--text-secondary); background: none;
+  border: none; cursor: pointer;
+  text-decoration: none; max-width: 80px;
+}
+.bottom-nav a.active, .bottom-nav a:active,
+.bottom-nav button.active, .bottom-nav button:active {
+  color: var(--primary);
+}
+.bottom-nav .bn-icon { font-size: 22px; margin-bottom: 2px; }
+.bottom-nav .bn-label { font-size: 11px; }
+
+@media (max-width: 768px) {
+  .menu-toggle { display: flex; align-items: center; }
 
   /* Homepage mobile */
   .hero-search h2 { font-size: 22px; }

@@ -343,6 +343,10 @@ class OKFBuild:
         html = html.replace("{{DESC}}", escape(page.description) if page.description else "")
         html = html.replace("{{NAV}}", nav_html)
         html = html.replace("{{LANG_SWITCH}}", lang_switch)
+        html = html.replace("{{ROOT}}", "/" if page.lang == "zh" else "/en/")
+        html = html.replace("{{HOME_LABEL}}", "首页" if page.lang == "zh" else "Home")
+        html = html.replace("{{SEARCH_LABEL}}", "搜索" if page.lang == "zh" else "Search")
+        html = html.replace("{{MENU_LABEL}}", "菜单" if page.lang == "zh" else "Menu")
 
         if is_home:
             body_html = self._render_home(page, tags_html)
@@ -478,6 +482,10 @@ class OKFBuild:
         html = html.replace("{{DESC}}", "404 — Page Not Found")
         html = html.replace("{{NAV}}", nav_html_zh)
         html = html.replace("{{LANG_SWITCH}}", '<a href="en/" class="lang-link">English</a>')
+        html = html.replace("{{ROOT}}", "./")
+        html = html.replace("{{HOME_LABEL}}", "首页")
+        html = html.replace("{{SEARCH_LABEL}}", "搜索")
+        html = html.replace("{{MENU_LABEL}}", "菜单")
         html = html.replace("{{CONTENT}}", body)
         html = html.replace("{{YEAR}}", str(datetime.now().year))
         with open(os.path.join(OUTPUT_DIR, "404.html"), "w", encoding="utf-8") as f:
@@ -497,8 +505,9 @@ class OKFBuild:
         errors = []
         for page in self.pages:
             html = self.render_html(page)
-            # Remove script tags to avoid false positives from JS templates
-            html = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL)
+            # Skip pages with search input (homepages) as they have JS templates
+            if 'search-input' in html:
+                continue
             page_dir = os.path.join(OUTPUT_DIR, page.url.lstrip("/"))
             for m in re.finditer(r'<a\s+href="([^"]+)"', html):
                 href = m.group(1)
@@ -532,7 +541,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <header class="site-header">
   <div class="header-inner">
     <button class="menu-toggle" aria-label="Toggle navigation">☰<span>菜单</span></button>
-    <a href="{{LOGO_HREF}}" class="logo">低GI知识库</a>
+    <a href="{{ROOT}}" class="logo">低GI知识库</a>
     <nav class="lang-nav">
       {{LANG_SWITCH}}
     </nav>
@@ -635,12 +644,52 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     }
   });
 })();
+
+/* Mobile bottom nav */
+(function(){
+  var bn = document.getElementById('bottom-nav');
+  if (!bn) return;
+  bn.classList.add('show');
+
+  var menuBtn = document.querySelector('.menu-toggle');
+  var sidebar = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+
+  var homeBtn = document.getElementById('bn-home');
+  if (homeBtn) homeBtn.addEventListener('click', function(e){
+    var root = document.documentElement.lang === 'zh' ? '/' : '/en/';
+    if (location.pathname !== root && location.pathname !== root + 'index.html') {
+      e.preventDefault();
+      location.href = root;
+    }
+  });
+
+  var searchBtn = document.getElementById('bn-search');
+  if (searchBtn) searchBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    var root = document.documentElement.lang === 'zh' ? '/' : '/en/';
+    location.href = root + '#search-input';
+  });
+
+  var menuToggle = document.getElementById('bn-menu');
+  if (menuToggle && menuBtn) {
+    menuToggle.addEventListener('click', function(e){
+      e.preventDefault();
+      menuBtn.click();
+    });
+  }
+})();
 </script>
 <footer class="site-footer">
   <div class="footer-inner">
     <p>低GI社区知识库 &copy; {{YEAR}} | <a href="https://github.com/thomaszta/lowgi-community.github.io">GitHub</a></p>
   </div>
 </footer>
+<div class="bottom-nav" id="bottom-nav">
+  <a href="{{ROOT}}" id="bn-home"><span class="bn-icon">🏠</span><span class="bn-label">{{HOME_LABEL}}</span></a>
+  <a href="#" id="bn-search"><span class="bn-icon">🔍</span><span class="bn-label">{{SEARCH_LABEL}}</span></a>
+  <button id="bn-menu"><span class="bn-icon">☰</span><span class="bn-label">{{MENU_LABEL}}</span></button>
+</div>
 </body>
 </html>"""
 
