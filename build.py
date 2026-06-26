@@ -339,11 +339,13 @@ class OKFBuild:
 
         html = HTML_TEMPLATE.replace("{{LANG}}", page.lang)
         html = html.replace("{{SITE_URL}}", SITE_URL)
-        html = html.replace("{{TITLE}}", escape(page.title) if page.title else "低GI知识库")
+        html = html.replace("{{TITLE}}", escape(page.title) if page.title else ("低GI知识库" if page.lang == "zh" else "Low-GI Knowledge Base"))
         html = html.replace("{{DESC}}", escape(page.description) if page.description else "")
         html = html.replace("{{NAV}}", nav_html)
         html = html.replace("{{LANG_SWITCH}}", lang_switch)
         html = html.replace("{{ROOT}}", "/" if page.lang == "zh" else "/en/")
+        html = html.replace("{{LOGO_TEXT}}", "低GI知识库" if page.lang == "zh" else "Low-GI KB")
+        html = html.replace("{{FOOTER_TEXT}}", "低GI社区知识库" if page.lang == "zh" else "Low-GI Community Knowledge Base")
         html = html.replace("{{HOME_LABEL}}", "首页" if page.lang == "zh" else "Home")
         html = html.replace("{{SEARCH_LABEL}}", "搜索" if page.lang == "zh" else "Search")
         html = html.replace("{{MENU_LABEL}}", "菜单" if page.lang == "zh" else "Menu")
@@ -352,7 +354,7 @@ class OKFBuild:
             body_html = self._render_home(page, tags_html)
         else:
             icon = TYPE_ICONS.get(page.type, "")
-            type_label = page.type.replace("_", " ").title() if not page.type == "Product Category" else "目录"
+            type_label = page.type.replace("_", " ").title() if not page.type == "Product Category" else ("目录" if page.lang == "zh" else "Directory")
             breadcrumb = self._breadcrumb(page)
             timestamp = page.frontmatter.get("timestamp", "")
             date_html = ""
@@ -370,7 +372,7 @@ class OKFBuild:
                 <h1>{escape(page.title)}</h1>
                 {tags_html}
                 {breadcrumb}
-                {f'<div class="page-meta">最后更新: {date_html}</div>' if date_html else ''}
+                {f'<div class="page-meta">{("最后更新" if page.lang == "zh" else "Updated")}: {date_html}</div>' if date_html else ''}
               </div>
               <div class="page-body">
                 {page.body_html}
@@ -405,15 +407,17 @@ class OKFBuild:
                 crumbs.append(f'<a href="{rel}">{escape(label)}</a>')
         if crumbs:
             home_rel = self._relative_path(page.url, "/")
-            crumbs.insert(0, f'<a href="{home_rel}">首页</a>')
+            home_text = "首页" if page.lang == "zh" else "Home"
+            crumbs.insert(0, f'<a href="{home_rel}">{home_text}</a>')
         crumbs.append(f'<span class="current">{escape(page.title)}</span>')
         return '<nav class="breadcrumb">' + " › ".join(crumbs) + "</nav>"
 
     def _render_home(self, page, tags_html):
+        logo_fallback = "低GI知识库" if page.lang == "zh" else "Low-GI Knowledge Base"
         return f"""
         <article class="home-page">
           <div class="hero">
-            <h1>{escape(page.title) if page.title else "低GI社区知识库"}</h1>
+            <h1>{escape(page.title) if page.title else logo_fallback}</h1>
             <p class="hero-desc">{escape(page.description) if page.description else ""}</p>
             {tags_html}
           </div>
@@ -446,6 +450,8 @@ class OKFBuild:
 
         self._write_404()
         self._write_sitemap()
+        if os.path.exists("robots.txt"):
+            shutil.copy("robots.txt", os.path.join(OUTPUT_DIR, "robots.txt"))
 
         print(f"✅ 生成完成: {len(self.pages)} 页面 → {OUTPUT_DIR}/")
 
@@ -483,6 +489,8 @@ class OKFBuild:
         html = html.replace("{{NAV}}", nav_html_zh)
         html = html.replace("{{LANG_SWITCH}}", '<a href="en/" class="lang-link">English</a>')
         html = html.replace("{{ROOT}}", "./")
+        html = html.replace("{{LOGO_TEXT}}", "低GI知识库")
+        html = html.replace("{{FOOTER_TEXT}}", "低GI社区知识库")
         html = html.replace("{{HOME_LABEL}}", "首页")
         html = html.replace("{{SEARCH_LABEL}}", "搜索")
         html = html.replace("{{MENU_LABEL}}", "菜单")
@@ -494,7 +502,20 @@ class OKFBuild:
     def _write_sitemap(self):
         urls = []
         for page in self.pages:
-            urls.append(f"  <url><loc>{SITE_URL}{page.url}</loc></url>")
+            ts = page.frontmatter.get("timestamp", "")
+            lastmod = ""
+            if ts:
+                try:
+                    if isinstance(ts, datetime):
+                        dt = ts
+                    elif isinstance(ts, str):
+                        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                    else:
+                        raise ValueError()
+                    lastmod = f"<lastmod>{dt.strftime('%Y-%m-%d')}</lastmod>"
+                except:
+                    pass
+            urls.append(f"  <url><loc>{SITE_URL}{page.url}</loc>{lastmod}</url>")
         xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         xml += "\n".join(urls)
         xml += "\n</urlset>\n"
@@ -540,8 +561,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <button class="menu-toggle" aria-label="Toggle navigation">☰<span>菜单</span></button>
-    <a href="{{ROOT}}" class="logo">低GI知识库</a>
+    <button class="menu-toggle" aria-label="Toggle navigation">☰<span>{{MENU_LABEL}}</span></button>
+    <a href="{{ROOT}}" class="logo">{{LOGO_TEXT}}</a>
     <nav class="lang-nav">
       {{LANG_SWITCH}}
     </nav>
@@ -682,7 +703,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </script>
 <footer class="site-footer">
   <div class="footer-inner">
-    <p>低GI社区知识库 &copy; {{YEAR}} | <a href="https://github.com/thomaszta/lowgi-community.github.io">GitHub</a></p>
+    <p>{{FOOTER_TEXT}} &copy; {{YEAR}} | <a href="https://github.com/thomaszta/lowgi-community.github.io">GitHub</a></p>
   </div>
 </footer>
 <div class="bottom-nav" id="bottom-nav">

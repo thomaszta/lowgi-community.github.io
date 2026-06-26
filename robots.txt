@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thomaszta.github.io/lowgi-community.github.io/sitemap.xml
