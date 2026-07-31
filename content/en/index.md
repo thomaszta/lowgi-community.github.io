@@ -10,7 +10,7 @@ generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 
 <div class="hero-search">
 
-## Check Food GI Values · Find Low-GI Recipes
+<h2>Check Food GI Values · Find Low-GI Recipes</h2>
 
 <input type="text" id="search-input" placeholder="Search foods, recipes, products..." autocomplete="off">
 
@@ -104,4 +104,4 @@ This is an **open-source public good project**. Everyone is welcome to contribut
 
 ---
 
-*Built with the <a href="https://github.com/GoogleCloudPlatform/knowledge-catalog">Open Knowledge Format (OKF)</a> v0.1 specification.*
+*Built with the <a href="https://github.com/GoogleCloudPlatform/knowledge-catalog">Open Knowledge Format (OKF)</a> v0.2 specification.*

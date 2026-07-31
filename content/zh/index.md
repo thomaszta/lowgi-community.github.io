@@ -10,7 +10,7 @@ generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 
 <div class="hero-search">
 
-## 查食物 GI 值，找低 GI 食谱
+<h2>查食物 GI 值，找低 GI 食谱</h2>
 
 <input type="text" id="search-input" placeholder="搜索食物、食谱、产品..." autocomplete="off">
 
@@ -104,4 +104,4 @@ generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 
 ---
 
-*本知识库采用 <a href="https://github.com/GoogleCloudPlatform/knowledge-catalog">Open Knowledge Format (OKF)</a> v0.1 规范构建。*
+*本知识库采用 <a href="https://github.com/GoogleCloudPlatform/knowledge-catalog">Open Knowledge Format (OKF)</a> v0.2 规范构建。*

@@ -562,11 +562,19 @@ class OKFBuild:
         if is_home:
             body_html = self._render_home(page, tags_html)
         else:
-            # 内页类型 - 简化显示，只用文字标签不要图标
-            type_label = page.type.replace("_", " ").title() if not page.type == "Product Category" else ("目录" if page.lang == "zh" else "Directory")
+            # 内页类型徽章（双语）
+            TYPE_LABELS = {
+                "zh": {"Food": "食材", "Recipe": "食谱", "Concept": "概念", "Guide": "指南",
+                       "Product": "成品食品", "FAQ": "常见问题", "Product Category": "目录",
+                       "Knowledge Base Home": "首页", "Log": "日志"},
+                "en": {"Product Category": "Directory"},
+            }
+            type_label = TYPE_LABELS.get(page.lang, {}).get(page.type) or page.type.replace("_", " ").title()
             breadcrumb = self._breadcrumb(page)
             dt = page.updated_at
             date_html = f'<time datetime="{dt.isoformat()}">{dt.strftime("%Y-%m-%d")}</time>' if dt else ""
+            # 正文首个 h1 与页头标题重复，去掉（移动端减少一屏内的重复标题）
+            content_html = re.sub(r"^\s*<h1[^>]*>.*?</h1>\s*", "", page.body_html, count=1, flags=re.S)
 
             # OKF v0.2 信号：status / stale_after / verified / sources
             zh = page.lang == "zh"
@@ -611,7 +619,7 @@ class OKFBuild:
               </div>
               {banner}
               <div class="page-body">
-                {page.body_html}
+                {content_html}
               </div>
               {sources_html}
             </article>

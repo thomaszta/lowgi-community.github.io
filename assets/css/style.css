@@ -538,15 +538,19 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
   .bottom-nav.show { display: flex; }
   .menu-toggle { display: flex; align-items: center; }
 
-  /* Header mobile */
-  .header-inner { padding: 0 16px; }
-  .logo { font-size: 16px; }
+  /* Header mobile：触控目标 ≥44px（Apple HIG） */
+  .header-inner { padding: 0 12px; }
+  .logo { font-size: 16px; padding: 10px 4px; }
+  .menu-toggle { min-width: 44px; min-height: 44px; justify-content: center; padding: 8px 10px; }
+  .search-toggle { width: 44px; height: 44px; }
   .lang-nav { display: none; }  /* Hide language nav on mobile, show in bottom nav if needed */
 
   /* Layout mobile */
   .layout { margin-top: var(--header-height); }
-  
+
   /* Sidebar handled in first media block above */
+  .sidebar-nav a { padding: 11px 12px; font-size: 15px; }
+  .nav-label { padding: 10px 12px 4px; }
 
   /* Homepage mobile */
   .hero-search h2 { font-size: 22px; }
