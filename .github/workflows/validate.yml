@@ -25,7 +25,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pyyaml markdown
-          
+          pip show pyyaml
+
       - name: Validate YAML frontmatter
         run: |
           python .github/validate-content.py
@@ -44,6 +45,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
           
       - name: Validate GI values
         run: |
