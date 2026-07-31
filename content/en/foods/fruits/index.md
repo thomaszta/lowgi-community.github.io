@@ -12,3 +12,4 @@ timestamp: 2026-06-21T10:00:00Z
 
 - [Apple](apple/) — Fiber-rich fruit with low GI
 - [Blueberry](blueberry/) — Antioxidant-rich berry, low GI
+- [Pear](pear/) — Water-rich fruit with plenty of fiber, low GI
