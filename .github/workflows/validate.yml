@@ -1,0 +1,50 @@
+name: Content Validation
+
+on:
+  pull_request:
+    paths:
+      - 'content/**'
+  push:
+    branches:
+      - master
+    paths:
+      - 'content/**'
+
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install pyyaml markdown
+          
+      - name: Validate YAML frontmatter
+        run: |
+          python .github/validate-content.py
+          
+      - name: Check for prohibited content
+        run: |
+          python .github/check-spam.py
+
+  validate-gi-values:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Validate GI values
+        run: |
+          python .github/validate-gi.py
