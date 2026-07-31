@@ -53,6 +53,41 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
 }
 .lang-link:hover { border-color: var(--primary); color: var(--primary); text-decoration: none; }
 
+/* Header Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Search Toggle Button */
+.search-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.search-toggle:hover {
+  background: var(--tag-bg);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.search-toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
 /* Layout */
 .layout {
   display: flex;

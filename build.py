@@ -67,7 +67,16 @@ SVG_ICONS = {
 }
 
 # 顶级分类目录（用于侧边栏）
-TOP_LEVEL_CATS = {"foods", "recipes", "products", "concepts", "community", "guides"}
+TOP_LEVEL_CATS = {"foods", "recipes", "products", "concepts", "community", "guides", "log"}
+
+# 食材库的二级分类（在侧边栏中展开显示）
+FOODS_SUBCATEGORIES = ["fruits", "grains", "legumes", "vegetables", "proteins"]
+
+# 成品食品二级分类
+PRODUCTS_SUBCATEGORIES = ["breads", "noodles", "snacks", "beverages", "condiments"]
+
+# 食谱库二级分类
+RECIPES_SUBCATEGORIES = ["breakfast", "main-meals", "snacks"]
 
 
 class OKFPage:
@@ -281,16 +290,37 @@ class OKFBuild:
         return tree
 
     def nav_to_html(self, tree, lang, current_url, level=0, parent_key=None):
+        """生成简化版侧边栏导航
+        
+        规则：
+        - level=0: 只显示一级分类入口
+        - 食材库(foods): 展开显示二级分类（水果、谷物等），但不显示具体食物
+        - 成品食品(products): 展开显示二级分类
+        - 食谱库(recipes): 展开显示二级分类
+        - 其他一级分类：不展开子分类
+        - level>=2: 不显示（不显示具体食物/食谱）
+        """
+        # 二级及以上不显示（不显示具体食物）
+        if level >= 2:
+            return ""
+        
         items = []
-        keys = sorted(tree.keys())
-        for key in keys:
+        
+        # 定义一级分类的顺序
+        category_order = ["community", "concepts", "foods", "guides", "log", "products", "recipes"]
+        
+        # 按顺序处理一级分类
+        for key in category_order:
+            if key not in tree:
+                continue
+                
             node = tree[key]
             page = node.get("_page")
             label = page.title if page else dir_label(key, lang)
             
-            # 只在顶级分类(level=0)且是TOP_LEVEL_CATS时显示图标
+            # 顶级分类显示图标
             icon = ""
-            if level == 0 and key in SVG_ICONS:
+            if key in SVG_ICONS:
                 icon = f'<span class="nav-icon">{SVG_ICONS[key]}</span>'
             
             children = node.get("_children", {})
@@ -298,27 +328,63 @@ class OKFBuild:
             li_class = "nav-item"
             if has_children:
                 li_class += " has-children"
+            
+            # 当前页面高亮
+            is_current = current_url.startswith(f"/{lang}/{key}/") or current_url.startswith(f"/{key}/")
+            if is_current:
+                li_class += " current"
 
-            link = ""
-            if page and not has_children:
+            # 生成链接
+            if page:
                 rel = self._relative_path(current_url, page.url)
                 link = f'<a href="{rel}">{icon}<span class="nav-text">{escape(label)}</span></a>'
-            elif page and has_children:
-                rel = self._relative_path(current_url, page.url)
-                link = f'<a href="{rel}">{icon}<span class="nav-text">{escape(label)}</span></a>'
-            elif has_children:
-                link = f'<span class="nav-label">{icon}<span class="nav-text">{escape(label)}</span></span>'
             else:
                 link = f'<span class="nav-label">{icon}<span class="nav-text">{escape(label)}</span></span>'
 
+            # 处理子分类
             children_html = ""
-            if has_children:
-                children_html = self.nav_to_html(children, lang, current_url, level + 1, key)
+            if level == 0 and has_children:
+                # 只展开特定分类的二级目录
+                if key == "foods":
+                    children_html = self._render_subcategories(children, FOODS_SUBCATEGORIES, lang, current_url, key)
+                elif key == "products":
+                    children_html = self._render_subcategories(children, PRODUCTS_SUBCATEGORIES, lang, current_url, key)
+                elif key == "recipes":
+                    children_html = self._render_subcategories(children, RECIPES_SUBCATEGORIES, lang, current_url, key)
+                # 其他分类不展开
 
             items.append(f"<li class='{li_class}'>{link}{children_html}</li>")
 
         if items:
             return f"<ul class='nav-level-{level}'>{''.join(items)}</ul>"
+        return ""
+    
+    def _render_subcategories(self, children, allowed_keys, lang, current_url, parent_key):
+        """渲染指定的二级分类列表"""
+        items = []
+        for key in allowed_keys:
+            if key not in children:
+                continue
+            node = children[key]
+            page = node.get("_page")
+            label = page.title if page else dir_label(key, lang)
+            
+            # 检查是否是当前页面
+            is_current = current_url.startswith(f"/{lang}/{parent_key}/{key}/") or current_url.startswith(f"/{parent_key}/{key}/")
+            li_class = "nav-item"
+            if is_current:
+                li_class += " current"
+            
+            if page:
+                rel = self._relative_path(current_url, page.url)
+                link = f'<a href="{rel}"><span class="nav-text">{escape(label)}</span></a>'
+            else:
+                link = f'<span class="nav-label"><span class="nav-text">{escape(label)}</span></span>'
+            
+            items.append(f"<li class='{li_class}'>{link}</li>")
+        
+        if items:
+            return f"<ul class='nav-level-1'>{''.join(items)}</ul>"
         return ""
 
     def get_lang_switch_html(self, page):
@@ -363,6 +429,7 @@ class OKFBuild:
         html = html.replace("{{HOME_LABEL}}", "首页" if page.lang == "zh" else "Home")
         html = html.replace("{{SEARCH_LABEL}}", "搜索" if page.lang == "zh" else "Search")
         html = html.replace("{{MENU_LABEL}}", "菜单" if page.lang == "zh" else "Menu")
+        html = html.replace("{{SEARCH_PLACEHOLDER}}", "搜索食物、食谱、指南..." if page.lang == "zh" else "Search foods, recipes, guides...")
         
         # SVG图标替换
         for icon_name, icon_svg in SVG_ICONS.items():
@@ -585,11 +652,28 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="header-inner">
     <button class="menu-toggle" aria-label="Toggle navigation">☰<span>{{MENU_LABEL}}</span></button>
     <a href="{{LOGO_HREF}}" class="logo">{{LOGO_TEXT}}</a>
-    <nav class="lang-nav">
-      {{LANG_SWITCH}}
-    </nav>
+    <div class="header-actions">
+      <button class="search-toggle" id="search-toggle" aria-label="Search">{{SVG_ICONS["search"]}}</button>
+      <nav class="lang-nav">
+        {{LANG_SWITCH}}
+      </nav>
+    </div>
   </div>
 </header>
+
+<!-- Global Search Modal -->
+<div class="search-modal" id="search-modal">
+  <div class="search-modal-backdrop"></div>
+  <div class="search-modal-content">
+    <div class="search-input-wrapper">
+      <span class="search-icon">{{SVG_ICONS["search"]}}</span>
+      <input type="text" class="search-input" id="global-search-input" placeholder="{{SEARCH_PLACEHOLDER}}" autocomplete="off">
+      <button class="search-close" id="search-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="search-results" id="global-search-results"></div>
+  </div>
+</div>
+
 <div class="layout">
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
   <aside class="sidebar" id="sidebar">
@@ -611,81 +695,180 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   overlay.addEventListener('click', toggle);
 })();
 
-/* Search functionality */
+/* Global Search Modal functionality */
 (function(){
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  if (!searchInput || !searchResults) return;
-
+  var searchToggle = document.getElementById('search-toggle');
+  var searchModal = document.getElementById('search-modal');
+  var searchClose = document.getElementById('search-close');
+  var searchInput = document.getElementById('global-search-input');
+  var searchResults = document.getElementById('global-search-results');
+  var backdrop = searchModal.querySelector('.search-modal-backdrop');
+  
+  if (!searchToggle || !searchModal) return;
+  
   var isZh = document.documentElement.lang === 'zh';
-
+  var langPrefix = isZh ? '' : 'en/';
+  
+  // Full page index for global search
   var pageIndex = isZh ? [
-    {t:'血糖生成指数 (GI)', d:'GI是衡量食物引起血糖升高程度的指标', u:'concepts/glycemic-index/', type:'概念'},
-    {t:'血糖负荷 (GL)', d:'GL综合考虑GI和份量，更准确评估食物对血糖的影响', u:'concepts/glycemic-load/', type:'概念'},
-    {t:'燕麦片', d:'低GI谷物，富含β-葡聚糖', u:'foods/grains/rolled-oats/', type:'食材'},
-    {t:'糙米', d:'全谷物，GI比白米低', u:'foods/grains/brown-rice/', type:'食材'},
-    {t:'藜麦', d:'高蛋白假谷物，GI低', u:'foods/grains/quinoa/', type:'食材'},
-    {t:'鹰嘴豆', d:'高蛋白高纤维豆类，GI极低', u:'foods/legumes/chickpeas/', type:'食材'},
-    {t:'苹果', d:'纤维丰富的水果，GI低', u:'foods/fruits/apple/', type:'食材'},
-    {t:'蓝莓', d:'抗氧化 berries，GI低', u:'foods/fruits/blueberry/', type:'食材'},
-    {t:'西兰花', d:'十字花科蔬菜，GI极低', u:'foods/vegetables/broccoli/', type:'食材'},
-    {t:'菠菜', d:'绿叶蔬菜，对血糖影响极小', u:'foods/vegetables/spinach/', type:'食材'},
-    {t:'鸡胸肉', d:'瘦蛋白，GI为零', u:'foods/proteins/chicken-breast/', type:'食材'},
-    {t:'鸡蛋', d:'完整蛋白，GI极低', u:'foods/proteins/egg/', type:'食材'},
-    {t:'豆腐', d:'植物蛋白，GI低', u:'foods/proteins/tofu/', type:'食材'},
-    {t:'燕麦蓝莓碗', d:'高纤维早餐食谱', u:'recipes/breakfast/oatmeal-berry-bowl/', type:'食谱'},
-    {t:'鸡蛋菠菜炒', d:'快手早餐食谱', u:'recipes/breakfast/egg-and-spinach-scramble/', type:'食谱'},
-    {t:'烤鸡沙拉', d:'低GI正餐食谱', u:'recipes/main-meals/grilled-chicken-salad/', type:'食谱'},
-    {t:'希腊酸奶芭菲', d:'健康小食食谱', u:'recipes/snacks/greek-yogurt-berry-parfait/', type:'食谱'},
-    {t:'如何读食品标签', d:'选购低GI食品的技巧', u:'guides/how-to-read-food-labels/', type:'指南'},
-    {t:'外出就餐指南', d:'餐厅点餐小技巧', u:'guides/dining-out-tips/', type:'指南'},
-    {t:'常见问题', d:'关于低GI饮食的FAQ', u:'community/faq/', type:'社区'},
+    // 核心概念
+    {t:'血糖生成指数 (GI)', d:'GI是衡量食物引起血糖升高程度的指标', u:'concepts/glycemic-index/', type:'概念', cat:'concepts'},
+    {t:'血糖负荷 (GL)', d:'GL综合考虑GI和份量，更准确评估食物对血糖的影响', u:'concepts/glycemic-load/', type:'概念', cat:'concepts'},
+    {t:'胰岛素指数 (II)', d:'II衡量食物引起胰岛素分泌的程度', u:'concepts/insulin-index/', type:'概念', cat:'concepts'},
+    {t:'膳食纤维', d:'纤维对血糖控制和消化健康的重要性', u:'concepts/dietary-fiber/', type:'概念', cat:'concepts'},
+    // 食材库 - 谷物
+    {t:'燕麦片', d:'低GI谷物，富含β-葡聚糖，有助于控制血糖', u:'foods/grains/rolled-oats/', type:'谷物', cat:'foods'},
+    {t:'糙米', d:'全谷物，GI比白米低，富含纤维', u:'foods/grains/brown-rice/', type:'谷物', cat:'foods'},
+    {t:'藜麦', d:'高蛋白假谷物，GI低，含完整氨基酸', u:'foods/grains/quinoa/', type:'谷物', cat:'foods'},
+    {t:'全麦面包', d:'比白面包GI更低，富含纤维', u:'foods/grains/whole-wheat-bread/', type:'谷物', cat:'foods'},
+    {t:'荞麦', d:'低GI谷物，适合糖尿病患者', u:'foods/grains/buckwheat/', type:'谷物', cat:'foods'},
+    {t:'黑米', d:'抗氧化谷物，富含花青素', u:'foods/grains/black-rice/', type:'谷物', cat:'foods'},
+    // 食材库 - 豆类
+    {t:'鹰嘴豆', d:'高蛋白高纤维豆类，GI极低', u:'foods/legumes/chickpeas/', type:'豆类', cat:'foods'},
+    {t:'扁豆', d:'低GI豆类，富含蛋白质和纤维', u:'foods/legumes/lentils/', type:'豆类', cat:'foods'},
+    {t:'黑豆', d:'高蛋白豆类，富含抗氧化剂', u:'foods/legumes/black-beans/', type:'豆类', cat:'foods'},
+    // 食材库 - 水果
+    {t:'苹果', d:'纤维丰富的水果，GI低，含果胶', u:'foods/fruits/apple/', type:'水果', cat:'foods'},
+    {t:'蓝莓', d:'抗氧化浆果，GI低，富含花青素', u:'foods/fruits/blueberry/', type:'水果', cat:'foods'},
+    {t:'草莓', d:'低糖水果，富含维生素C', u:'foods/fruits/strawberry/', type:'水果', cat:'foods'},
+    {t:'柚子', d:'低GI柑橘类水果', u:'foods/fruits/grapefruit/', type:'水果', cat:'foods'},
+    {t:'樱桃', d:'低GI水果，含天然褪黑素', u:'foods/fruits/cherry/', type:'水果', cat:'foods'},
+    // 食材库 - 蔬菜
+    {t:'西兰花', d:'十字花科蔬菜，GI极低，富含维生素C', u:'foods/vegetables/broccoli/', type:'蔬菜', cat:'foods'},
+    {t:'菠菜', d:'绿叶蔬菜，对血糖影响极小', u:'foods/vegetables/spinach/', type:'蔬菜', cat:'foods'},
+    {t:'羽衣甘蓝', d:'超级食物，营养密度极高', u:'foods/vegetables/kale/', type:'蔬菜', cat:'foods'},
+    {t:'花椰菜', d:'低GI蔬菜，可替代米饭', u:'foods/vegetables/cauliflower/', type:'蔬菜', cat:'foods'},
+    {t:'芦笋', d:'低GI蔬菜，富含叶酸', u:'foods/vegetables/asparagus/', type:'蔬菜', cat:'foods'},
+    {t:'黄瓜', d:'水分丰富，GI极低', u:'foods/vegetables/cucumber/', type:'蔬菜', cat:'foods'},
+    // 食材库 - 蛋白质
+    {t:'鸡胸肉', d:'瘦蛋白，GI为零，增肌首选', u:'foods/proteins/chicken-breast/', type:'蛋白质', cat:'foods'},
+    {t:'鸡蛋', d:'完整蛋白，GI极低，营养全面', u:'foods/proteins/egg/', type:'蛋白质', cat:'foods'},
+    {t:'豆腐', d:'植物蛋白，GI低，富含异黄酮', u:'foods/proteins/tofu/', type:'蛋白质', cat:'foods'},
+    {t:'三文鱼', d:'富含Omega-3的鱼类', u:'foods/proteins/salmon/', type:'蛋白质', cat:'foods'},
+    {t:'希腊酸奶', d:'高蛋白酸奶，益生菌丰富', u:'foods/proteins/greek-yogurt/', type:'蛋白质', cat:'foods'},
+    // 食谱库 - 早餐
+    {t:'燕麦蓝莓碗', d:'高纤维早餐食谱，简单快捷', u:'recipes/breakfast/oatmeal-berry-bowl/', type:'早餐', cat:'recipes'},
+    {t:'鸡蛋菠菜炒', d:'快手早餐食谱，高蛋白低GI', u:'recipes/breakfast/egg-and-spinach-scramble/', type:'早餐', cat:'recipes'},
+    {t:'全麦吐司配牛油果', d:'健康脂肪早餐', u:'recipes/breakfast/avocado-toast/', type:'早餐', cat:'recipes'},
+    // 食谱库 - 正餐
+    {t:'烤鸡沙拉', d:'低GI正餐食谱，高蛋白', u:'recipes/main-meals/grilled-chicken-salad/', type:'正餐', cat:'recipes'},
+    {t:'藜麦蔬菜碗', d:'素食正餐，营养均衡', u:'recipes/main-meals/quinoa-veggie-bowl/', type:'正餐', cat:'recipes'},
+    {t:'三文鱼配芦笋', d:'Omega-3丰富的晚餐', u:'recipes/main-meals/salmon-asparagus/', type:'正餐', cat:'recipes'},
+    // 食谱库 - 小食
+    {t:'希腊酸奶芭菲', d:'健康小食食谱，益生菌丰富', u:'recipes/snacks/greek-yogurt-berry-parfait/', type:'小食', cat:'recipes'},
+    {t:'鹰嘴豆泥', d:'高蛋白零食配蔬菜', u:'recipes/snacks/hummus-veggie/', type:'小食', cat:'recipes'},
+    {t:'坚果混合', d:'健康脂肪零食', u:'recipes/snacks/trail-mix/', type:'小食', cat:'recipes'},
+    // 成品食品
+    {t:'低GI面包', d:'市售低GI面包推荐', u:'products/breads/', type:'成品', cat:'products'},
+    {t:'低GI面条', d:'荞麦面、全麦面等', u:'products/noodles/', type:'成品', cat:'products'},
+    {t:'健康零食', d:'低GI零食选择', u:'products/snacks/', type:'成品', cat:'products'},
+    {t:'低糖饮品', d:'适合糖尿病患者的饮品', u:'products/beverages/', type:'成品', cat:'products'},
+    // 实用指南
+    {t:'如何读食品标签', d:'选购低GI食品的技巧', u:'guides/how-to-read-food-labels/', type:'指南', cat:'guides'},
+    {t:'外出就餐指南', d:'餐厅点餐小技巧', u:'guides/dining-out-tips/', type:'指南', cat:'guides'},
+    {t:'血糖监测指南', d:'如何监测和理解血糖数据', u:'guides/blood-sugar-monitoring/', type:'指南', cat:'guides'},
+    {t:'低GI购物清单', d:'超市购物必备清单', u:'guides/shopping-list/', type:'指南', cat:'guides'},
+    // 社区
+    {t:'常见问题', d:'关于低GI饮食的FAQ', u:'community/faq/', type:'社区', cat:'community'},
+    {t:'贡献指南', d:'如何为知识库做贡献', u:'community/contributing/', type:'社区', cat:'community'},
+    // 更新日志
+    {t:'更新日志', d:'网站更新记录', u:'log/', type:'日志', cat:'log'},
   ] : [
-    {t:'Glycemic Index (GI)', d:'GI measures how quickly a food raises blood sugar', u:'en/concepts/glycemic-index/', type:'Concept'},
-    {t:'Glycemic Load (GL)', d:'GL considers both GI and serving size for accurate impact', u:'en/concepts/glycemic-load/', type:'Concept'},
-    {t:'Rolled Oats', d:'Low-GI grain rich in beta-glucan', u:'en/foods/grains/rolled-oats/', type:'Food'},
-    {t:'Brown Rice', d:'Whole grain with lower GI than white rice', u:'en/foods/grains/brown-rice/', type:'Food'},
-    {t:'Quinoa', d:'High-protein pseudograin, low GI', u:'en/foods/grains/quinoa/', type:'Food'},
-    {t:'Chickpeas', d:'High-protein, high-fiber legume, very low GI', u:'en/foods/legumes/chickpeas/', type:'Food'},
-    {t:'Apple', d:'Fiber-rich fruit with low GI', u:'en/foods/fruits/apple/', type:'Food'},
-    {t:'Blueberry', d:'Antioxidant-rich berry, low GI', u:'en/foods/fruits/blueberry/', type:'Food'},
-    {t:'Broccoli', d:'Cruciferous vegetable, very low GI', u:'en/foods/vegetables/broccoli/', type:'Food'},
-    {t:'Spinach', d:'Leafy green with minimal blood sugar impact', u:'en/foods/vegetables/spinach/', type:'Food'},
-    {t:'Chicken Breast', d:'Lean protein, zero GI', u:'en/foods/proteins/chicken-breast/', type:'Food'},
-    {t:'Egg', d:'Complete protein, very low GI', u:'en/foods/proteins/egg/', type:'Food'},
-    {t:'Tofu', d:'Plant-based protein, low GI', u:'en/foods/proteins/tofu/', type:'Food'},
-    {t:'Oatmeal Berry Bowl', d:'High-fiber breakfast recipe', u:'en/recipes/breakfast/oatmeal-berry-bowl/', type:'Recipe'},
-    {t:'Egg and Spinach Scramble', d:'Quick breakfast recipe', u:'en/recipes/breakfast/egg-and-spinach-scramble/', type:'Recipe'},
-    {t:'Grilled Chicken Salad', d:'Low-GI main meal recipe', u:'en/recipes/main-meals/grilled-chicken-salad/', type:'Recipe'},
-    {t:'Greek Yogurt Berry Parfait', d:'Healthy snack recipe', u:'en/recipes/snacks/greek-yogurt-berry-parfait/', type:'Recipe'},
-    {t:'How to Read Food Labels', d:'Tips for choosing low-GI foods', u:'en/guides/how-to-read-food-labels/', type:'Guide'},
-    {t:'Dining Out Tips', d:'Restaurant ordering tips', u:'en/guides/dining-out-tips/', type:'Guide'},
-    {t:'FAQ', d:'Frequently asked questions about low-GI diet', u:'en/community/faq/', type:'Community'},
+    // English index
+    {t:'Glycemic Index (GI)', d:'GI measures how quickly a food raises blood sugar', u:'en/concepts/glycemic-index/', type:'Concept', cat:'concepts'},
+    {t:'Glycemic Load (GL)', d:'GL considers both GI and serving size for accurate impact', u:'en/concepts/glycemic-load/', type:'Concept', cat:'concepts'},
+    {t:'Insulin Index (II)', d:'II measures insulin response to foods', u:'en/concepts/insulin-index/', type:'Concept', cat:'concepts'},
+    {t:'Dietary Fiber', d:'Importance of fiber for blood sugar control', u:'en/concepts/dietary-fiber/', type:'Concept', cat:'concepts'},
+    {t:'Rolled Oats', d:'Low-GI grain rich in beta-glucan', u:'en/foods/grains/rolled-oats/', type:'Grain', cat:'foods'},
+    {t:'Brown Rice', d:'Whole grain with lower GI than white rice', u:'en/foods/grains/brown-rice/', type:'Grain', cat:'foods'},
+    {t:'Quinoa', d:'High-protein pseudograin, low GI', u:'en/foods/grains/quinoa/', type:'Grain', cat:'foods'},
+    {t:'Whole Wheat Bread', d:'Lower GI than white bread', u:'en/foods/grains/whole-wheat-bread/', type:'Grain', cat:'foods'},
+    {t:'Chickpeas', d:'High-protein, high-fiber legume, very low GI', u:'en/foods/legumes/chickpeas/', type:'Legume', cat:'foods'},
+    {t:'Lentils', d:'Low-GI legume rich in protein', u:'en/foods/legumes/lentils/', type:'Legume', cat:'foods'},
+    {t:'Apple', d:'Fiber-rich fruit with low GI', u:'en/foods/fruits/apple/', type:'Fruit', cat:'foods'},
+    {t:'Blueberry', d:'Antioxidant-rich berry, low GI', u:'en/foods/fruits/blueberry/', type:'Fruit', cat:'foods'},
+    {t:'Strawberry', d:'Low-sugar fruit rich in vitamin C', u:'en/foods/fruits/strawberry/', type:'Fruit', cat:'foods'},
+    {t:'Broccoli', d:'Cruciferous vegetable, very low GI', u:'en/foods/vegetables/broccoli/', type:'Vegetable', cat:'foods'},
+    {t:'Spinach', d:'Leafy green with minimal blood sugar impact', u:'en/foods/vegetables/spinach/', type:'Vegetable', cat:'foods'},
+    {t:'Kale', d:'Nutrient-dense superfood', u:'en/foods/vegetables/kale/', type:'Vegetable', cat:'foods'},
+    {t:'Chicken Breast', d:'Lean protein, zero GI', u:'en/foods/proteins/chicken-breast/', type:'Protein', cat:'foods'},
+    {t:'Egg', d:'Complete protein, very low GI', u:'en/foods/proteins/egg/', type:'Protein', cat:'foods'},
+    {t:'Tofu', d:'Plant-based protein, low GI', u:'en/foods/proteins/tofu/', type:'Protein', cat:'foods'},
+    {t:'Salmon', d:'Omega-3 rich fish', u:'en/foods/proteins/salmon/', type:'Protein', cat:'foods'},
+    {t:'Greek Yogurt', d:'High-protein yogurt with probiotics', u:'en/foods/proteins/greek-yogurt/', type:'Protein', cat:'foods'},
+    {t:'Oatmeal Berry Bowl', d:'High-fiber breakfast recipe', u:'en/recipes/breakfast/oatmeal-berry-bowl/', type:'Breakfast', cat:'recipes'},
+    {t:'Egg and Spinach Scramble', d:'Quick high-protein breakfast', u:'en/recipes/breakfast/egg-and-spinach-scramble/', type:'Breakfast', cat:'recipes'},
+    {t:'Grilled Chicken Salad', d:'Low-GI main meal recipe', u:'en/recipes/main-meals/grilled-chicken-salad/', type:'Main Meal', cat:'recipes'},
+    {t:'Quinoa Veggie Bowl', d:'Balanced vegetarian meal', u:'en/recipes/main-meals/quinoa-veggie-bowl/', type:'Main Meal', cat:'recipes'},
+    {t:'Greek Yogurt Parfait', d:'Healthy snack with probiotics', u:'en/recipes/snacks/greek-yogurt-berry-parfait/', type:'Snack', cat:'recipes'},
+    {t:'How to Read Food Labels', d:'Tips for choosing low-GI foods', u:'en/guides/how-to-read-food-labels/', type:'Guide', cat:'guides'},
+    {t:'Dining Out Tips', d:'Restaurant ordering tips', u:'en/guides/dining-out-tips/', type:'Guide', cat:'guides'},
+    {t:'FAQ', d:'Frequently asked questions about low-GI diet', u:'en/community/faq/', type:'Community', cat:'community'},
+    {t:'Changelog', d:'Site update history', u:'en/log/', type:'Log', cat:'log'},
   ];
-
+  
+  function openModal() {
+    searchModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { searchInput.focus(); }, 100);
+  }
+  
+  function closeModal() {
+    searchModal.classList.remove('show');
+    document.body.style.overflow = '';
+    searchInput.value = '';
+    searchResults.classList.remove('show');
+  }
+  
+  searchToggle.addEventListener('click', openModal);
+  searchClose.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    // Cmd/Ctrl + K to open search
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      openModal();
+    }
+    // ESC to close
+    if (e.key === 'Escape' && searchModal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+  
+  // Search functionality
+  var searchTimeout;
   searchInput.addEventListener('input', function(){
+    clearTimeout(searchTimeout);
     var q = this.value.trim();
-    if (q.length < 1) { searchResults.classList.remove('show'); return; }
-    var qLower = q.toLowerCase();
-    var hits = pageIndex.filter(function(p){
-      return p.t.toLowerCase().indexOf(qLower) !== -1 || p.d.toLowerCase().indexOf(qLower) !== -1;
-    }).slice(0, 8);
-
-    if (hits.length === 0) {
-      searchResults.innerHTML = '<div class="search-no-result">' + (isZh ? '未找到相关结果' : 'No results found') + '</div>';
-    } else {
-      searchResults.innerHTML = hits.map(function(p){
-        return '<div class="search-result-item"><a href="' + p.u + '"><div class="result-title">' + p.t + '</div><div class="result-type">' + p.type + ' · ' + p.d.substring(0, 30) + '</div></a></div>';
-      }).join('');
+    if (q.length < 1) { 
+      searchResults.innerHTML = '<div class="search-hint">' + (isZh ? '输入关键词搜索食物、食谱和指南...' : 'Type to search foods, recipes, and guides...') + '</div>';
+      searchResults.classList.add('show');
+      return; 
     }
-    searchResults.classList.add('show');
-  });
+    
+    searchTimeout = setTimeout(function() {
+      var qLower = q.toLowerCase();
+      var hits = pageIndex.filter(function(p){
+        return p.t.toLowerCase().indexOf(qLower) !== -1 || 
+               p.d.toLowerCase().indexOf(qLower) !== -1 ||
+               p.type.toLowerCase().indexOf(qLower) !== -1;
+      }).slice(0, 10);
 
-  document.addEventListener('click', function(e){
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.classList.remove('show');
-    }
+      if (hits.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-result">' + (isZh ? '未找到相关结果' : 'No results found') + '</div>';
+      } else {
+        searchResults.innerHTML = hits.map(function(p){
+          return '<div class="search-result-item"><a href="' + p.u + '"><div class="result-title">' + p.t + '</div><div class="result-meta"><span class="result-type">' + p.type + '</span><span class="result-desc">' + p.d.substring(0, 40) + '...</span></div></a></div>';
+        }).join('');
+      }
+      searchResults.classList.add('show');
+    }, 150);
   });
+  
+  // Show initial hint
+  searchResults.innerHTML = '<div class="search-hint">' + (isZh ? '输入关键词搜索食物、食谱和指南...' : 'Type to search foods, recipes, and guides...') + '</div>';
 })();
 
 /* Mobile bottom nav */
@@ -701,11 +884,19 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   var homeBtn = document.getElementById('bn-home');
 
   var searchBtn = document.getElementById('bn-search');
-  if (searchBtn) searchBtn.addEventListener('click', function(e){
-    e.preventDefault();
-    var root = homeBtn ? homeBtn.getAttribute('href') : './';
-    location.href = root + '#search-input';
-  });
+  if (searchBtn) {
+    searchBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      // Open global search modal
+      var searchModal = document.getElementById('search-modal');
+      var searchInput = document.getElementById('global-search-input');
+      if (searchModal) {
+        searchModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        if (searchInput) setTimeout(function() { searchInput.focus(); }, 100);
+      }
+    });
+  }
 
   var menuToggle = document.getElementById('bn-menu');
   if (menuToggle && menuBtn) {
