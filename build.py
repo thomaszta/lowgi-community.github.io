@@ -545,6 +545,10 @@ class OKFBuild:
         logo_href = self._relative_path(page.url, home_url)
         css_href = ASSET_BASE + "/assets/css/style.css"
         favicon_href = ASSET_BASE + "/assets/favicon.svg"
+        search_base = self._relative_path(page.url, "/")
+        if not search_base.endswith("/"):
+            search_base += "/"
+        html = html.replace("{{SEARCH_BASE}}", search_base)
         html = html.replace("{{LOGO_HREF}}", logo_href)
         html = html.replace("{{CSS_HREF}}", css_href)
         html = html.replace("{{FAVICON_HREF}}", favicon_href)
@@ -656,6 +660,8 @@ class OKFBuild:
         html = html.replace("{{HOME_LABEL}}", "首页")
         html = html.replace("{{SEARCH_LABEL}}", "搜索")
         html = html.replace("{{MENU_LABEL}}", "菜单")
+        # 404.html may be served at any path depth — search links must be absolute
+        html = html.replace("{{SEARCH_BASE}}", SITE_URL + "/")
         html = html.replace("{{CONTENT}}", body)
         html = html.replace("{{YEAR}}", str(datetime.now().year))
         with open(os.path.join(OUTPUT_DIR, "404.html"), "w", encoding="utf-8") as f:
@@ -781,6 +787,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   
   var isZh = document.documentElement.lang === 'zh';
   var langPrefix = isZh ? '' : 'en/';
+  var searchBase = '{{SEARCH_BASE}}';  // relative path from current page to site root
   
   // Full page index for global search
   var pageIndex = isZh ? [
@@ -935,7 +942,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         searchResults.innerHTML = '<div class="search-no-result">' + (isZh ? '未找到相关结果' : 'No results found') + '</div>';
       } else {
         searchResults.innerHTML = hits.map(function(p){
-          return '<div class="search-result-item"><a href="' + p.u + '"><div class="result-title">' + p.t + '</div><div class="result-meta"><span class="result-type">' + p.type + '</span><span class="result-desc">' + p.d.substring(0, 40) + '...</span></div></a></div>';
+          return '<div class="search-result-item"><a href="' + searchBase + p.u + '"><div class="result-title">' + p.t + '</div><div class="result-meta"><span class="result-type">' + p.type + '</span><span class="result-desc">' + p.d.substring(0, 40) + '...</span></div></a></div>';
         }).join('');
       }
       searchResults.classList.add('show');
