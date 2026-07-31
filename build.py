@@ -948,7 +948,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 (function(){
   var bn = document.getElementById('bottom-nav');
   if (!bn) return;
-  bn.classList.add('show');
+  
+  // Only show on mobile screens
+  if (window.innerWidth <= 768) {
+    bn.classList.add('show');
+  }
 
   var menuBtn = document.querySelector('.menu-toggle');
   var sidebar = document.getElementById('sidebar');
