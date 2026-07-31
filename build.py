@@ -30,6 +30,7 @@ def dir_label(key, lang):
         "community": { "zh": "社区", "en": "Community" },
         "products": { "zh": "成品食品", "en": "Products" },
         "grains": { "zh": "谷类", "en": "Grains" },
+        "legumes": { "zh": "豆类", "en": "Legumes" },
         "vegetables": { "zh": "蔬菜", "en": "Vegetables" },
         "fruits": { "zh": "水果", "en": "Fruits" },
         "proteins": { "zh": "蛋白质", "en": "Proteins" },
@@ -211,6 +212,8 @@ class OKFBuild:
             source_dir = os.path.dirname(page.source_rel)
             resolved = os.path.normpath(os.path.join(source_dir, url))
             target_page = self.page_by_source.get(resolved)
+            if not target_page and resolved.endswith(".md"):
+                target_page = self.page_by_source.get(resolved[:-3])
             if target_page:
                 return target_page
             target_url = "/" + resolved + "/"
@@ -343,7 +346,6 @@ class OKFBuild:
         html = html.replace("{{DESC}}", escape(page.description) if page.description else "")
         html = html.replace("{{NAV}}", nav_html)
         html = html.replace("{{LANG_SWITCH}}", lang_switch)
-        html = html.replace("{{ROOT}}", "/" if page.lang == "zh" else "/en/")
         html = html.replace("{{LOGO_TEXT}}", "低GI知识库" if page.lang == "zh" else "Low-GI KB")
         html = html.replace("{{FOOTER_TEXT}}", "低GI社区知识库" if page.lang == "zh" else "Low-GI Community Knowledge Base")
         html = html.replace("{{HOME_LABEL}}", "首页" if page.lang == "zh" else "Home")
@@ -360,9 +362,12 @@ class OKFBuild:
             date_html = ""
             if timestamp:
                 try:
-                    dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
-                    date_html = f'<time datetime="{timestamp}">{dt.strftime("%Y-%m-%d")}</time>'
-                except:
+                    if isinstance(timestamp, datetime):
+                        dt = timestamp
+                    else:
+                        dt = datetime.fromisoformat(str(timestamp).replace("Z", "+00:00"))
+                    date_html = f'<time datetime="{dt.isoformat()}">{dt.strftime("%Y-%m-%d")}</time>'
+                except (ValueError, TypeError):
                     pass
 
             body_html = f"""
@@ -383,7 +388,7 @@ class OKFBuild:
         home_url = "/en/" if page.lang == "en" else "/"
         logo_href = self._relative_path(page.url, home_url)
         css_href = SITE_URL + "/assets/css/style.css"
-        favicon_href = SITE_URL + "/assets/favicon.ico"
+        favicon_href = SITE_URL + "/assets/favicon.svg"
         html = html.replace("{{LOGO_HREF}}", logo_href)
         html = html.replace("{{CSS_HREF}}", css_href)
         html = html.replace("{{FAVICON_HREF}}", favicon_href)
@@ -456,18 +461,20 @@ class OKFBuild:
         print(f"✅ 生成完成: {len(self.pages)} 页面 → {OUTPUT_DIR}/")
 
     def _write_404(self):
+        # GitHub Pages renders 404.html at the requested (possibly deep) URL,
+        # so every link and asset here must be absolute — relative paths break.
         nav_html_zh = self.nav_to_html(self.build_nav_tree("zh"), "zh", "/")
-        nav_html_en = self.nav_to_html(self.build_nav_tree("en"), "en", "/en/")
+        nav_html_zh = nav_html_zh.replace('href="', f'href="{SITE_URL}/')
         body = """
         <div class="error-page" id="error-zh">
           <h1>404</h1>
           <p>页面未找到</p>
-          <a href="./" class="btn">返回首页</a>
+          <a href="__BASE__/" class="btn">返回首页</a>
         </div>
         <div class="error-page" id="error-en" style="display:none">
           <h1>404</h1>
           <p>Page Not Found</p>
-          <a href="en/" class="btn">Back to Home</a>
+          <a href="__BASE__/en/" class="btn">Back to Home</a>
         </div>
         <script>
         (function(){
@@ -477,18 +484,17 @@ class OKFBuild:
           }
         })();
         </script>
-        """
+        """.replace("__BASE__", SITE_URL)
         html = HTML_TEMPLATE
         html = html.replace("{{LANG}}", "zh")
-        html = html.replace("{{LOGO_HREF}}", "./")
-        html = html.replace("{{CSS_HREF}}", "assets/css/style.css")
-        html = html.replace("{{FAVICON_HREF}}", "assets/favicon.svg")
+        html = html.replace("{{LOGO_HREF}}", SITE_URL + "/")
+        html = html.replace("{{CSS_HREF}}", SITE_URL + "/assets/css/style.css")
+        html = html.replace("{{FAVICON_HREF}}", SITE_URL + "/assets/favicon.svg")
         html = html.replace("{{SITE_URL}}", SITE_URL)
         html = html.replace("{{TITLE}}", "404 — Page Not Found")
         html = html.replace("{{DESC}}", "404 — Page Not Found")
         html = html.replace("{{NAV}}", nav_html_zh)
-        html = html.replace("{{LANG_SWITCH}}", '<a href="en/" class="lang-link">English</a>')
-        html = html.replace("{{ROOT}}", "./")
+        html = html.replace("{{LANG_SWITCH}}", f'<a href="{SITE_URL}/en/" class="lang-link">English</a>')
         html = html.replace("{{LOGO_TEXT}}", "低GI知识库")
         html = html.replace("{{FOOTER_TEXT}}", "低GI社区知识库")
         html = html.replace("{{HOME_LABEL}}", "首页")
@@ -562,7 +568,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <header class="site-header">
   <div class="header-inner">
     <button class="menu-toggle" aria-label="Toggle navigation">☰<span>{{MENU_LABEL}}</span></button>
-    <a href="{{ROOT}}" class="logo">{{LOGO_TEXT}}</a>
+    <a href="{{LOGO_HREF}}" class="logo">{{LOGO_TEXT}}</a>
     <nav class="lang-nav">
       {{LANG_SWITCH}}
     </nav>
@@ -677,18 +683,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   var overlay = document.getElementById('sidebar-overlay');
 
   var homeBtn = document.getElementById('bn-home');
-  if (homeBtn) homeBtn.addEventListener('click', function(e){
-    var root = document.documentElement.lang === 'zh' ? '/' : '/en/';
-    if (location.pathname !== root && location.pathname !== root + 'index.html') {
-      e.preventDefault();
-      location.href = root;
-    }
-  });
 
   var searchBtn = document.getElementById('bn-search');
   if (searchBtn) searchBtn.addEventListener('click', function(e){
     e.preventDefault();
-    var root = document.documentElement.lang === 'zh' ? '/' : '/en/';
+    var root = homeBtn ? homeBtn.getAttribute('href') : './';
     location.href = root + '#search-input';
   });
 
@@ -707,7 +706,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
 </footer>
 <div class="bottom-nav" id="bottom-nav">
-  <a href="{{ROOT}}" id="bn-home"><span class="bn-icon">🏠</span><span class="bn-label">{{HOME_LABEL}}</span></a>
+  <a href="{{LOGO_HREF}}" id="bn-home"><span class="bn-icon">🏠</span><span class="bn-label">{{HOME_LABEL}}</span></a>
   <a href="#" id="bn-search"><span class="bn-icon">🔍</span><span class="bn-label">{{SEARCH_LABEL}}</span></a>
   <button id="bn-menu"><span class="bn-icon">☰</span><span class="bn-label">{{MENU_LABEL}}</span></button>
 </div>
