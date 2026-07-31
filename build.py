@@ -195,6 +195,11 @@ class OKFBuild:
 
     def resolve_links(self, page):
         md = page.body_md
+        
+        # 自动列表生成功能：如果包含 {{AUTO_LIST}} 则自动生成目录列表
+        if "{{AUTO_LIST}}" in md:
+            auto_list = self._generate_auto_list(page)
+            md = md.replace("{{AUTO_LIST}}", auto_list)
 
         def replace_link(match):
             text = match.group(1)
@@ -226,6 +231,70 @@ class OKFBuild:
 
         md = re.sub(r'href="([^"]*)"([^>]*)', replace_html_link, md)
         return md
+    
+    def _generate_auto_list(self, page):
+        """自动扫描同目录下的所有 .md 文件，生成列表"""
+        # 获取当前页面的目录路径
+        source_dir = os.path.dirname(os.path.join(CONTENT_DIR, page.source_rel))
+        
+        if not os.path.isdir(source_dir):
+            return "<!-- AUTO_LIST: 目录不存在 -->"
+        
+        # 扫描目录下的所有 .md 文件
+        items = []
+        for filename in os.listdir(source_dir):
+            if not filename.endswith('.md') or filename == 'index.md':
+                continue
+            
+            filepath = os.path.join(source_dir, filename)
+            if not os.path.isfile(filepath):
+                continue
+            
+            # 读取 frontmatter 获取标题
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                # 解析 YAML frontmatter
+                if content.startswith('---'):
+                    parts = content.split('---', 2)
+                    if len(parts) >= 3:
+                        frontmatter = yaml.safe_load(parts[1]) or {}
+                        title = frontmatter.get('title', filename[:-3])
+                        description = frontmatter.get('description', '')
+                    else:
+                        title = filename[:-3]
+                        description = ''
+                else:
+                    title = filename[:-3]
+                    description = ''
+            except Exception as e:
+                title = filename[:-3]
+                description = ''
+            
+            # 生成相对链接
+            rel_path = filename[:-3]  # 去掉 .md 后缀
+            items.append({
+                'title': title,
+                'description': description,
+                'url': rel_path
+            })
+        
+        # 按标题排序
+        items.sort(key=lambda x: x['title'])
+        
+        # 生成 markdown 列表
+        if not items:
+            return "<!-- AUTO_LIST: 没有找到任何项目 -->"
+        
+        lines = []
+        for item in items:
+            if item['description']:
+                lines.append(f"- [{item['title']}]({item['url']}) — {item['description']}")
+            else:
+                lines.append(f"- [{item['title']}]({item['url']})")
+        
+        return '\n'.join(lines)
 
     def _resolve_target(self, page, url):
         if url.startswith("/"):

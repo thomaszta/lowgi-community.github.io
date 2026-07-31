@@ -10,6 +10,4 @@ timestamp: 2026-06-21T10:00:00Z
 
 # 水果
 
-- [苹果](apple/) — 纤维丰富的水果，GI低
-- [蓝莓](blueberry/) — 抗氧化 berries，GI低
-- [梨](pear/) — 水分丰富，膳食纤维含量高
+{{AUTO_LIST}}
