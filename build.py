@@ -9,7 +9,7 @@ import re
 import sys
 import shutil
 import json
-from datetime import datetime
+from datetime import datetime, date
 from pathlib import Path
 from html import escape
 
@@ -148,6 +148,57 @@ class OKFPage:
     @property
     def tags(self):
         return self.frontmatter.get("tags", [])
+
+    @property
+    def updated_at(self):
+        """OKF v0.2 generated.at, falling back to legacy v0.1 timestamp. Returns datetime or None."""
+        generated = self.frontmatter.get("generated")
+        value = generated.get("at", "") if isinstance(generated, dict) else ""
+        if not value:
+            value = self.frontmatter.get("timestamp", "")
+        if isinstance(value, datetime):
+            return value
+        if isinstance(value, str) and value:
+            try:
+                return datetime.fromisoformat(value.replace("Z", "+00:00"))
+            except ValueError:
+                return None
+        return None
+
+    @property
+    def sources(self):
+        """OKF v0.2 sources list, falling back to legacy v0.1 single source string."""
+        sources = self.frontmatter.get("sources")
+        if isinstance(sources, list):
+            return [s for s in sources if isinstance(s, dict) and s.get("resource")]
+        legacy = self.frontmatter.get("source", "")
+        return [{"resource": legacy}] if legacy else []
+
+    @property
+    def trust_tier(self):
+        """OKF v0.2 §5.3: unverified / machine-confirmed / human-reviewed."""
+        verified = self.frontmatter.get("verified")
+        if isinstance(verified, dict):
+            verified = [verified]
+        if not isinstance(verified, list) or not verified:
+            return ""
+        actors = [str(v.get("by", "")) for v in verified if isinstance(v, dict)]
+        return "human" if any(a.startswith("human:") for a in actors) else "machine"
+
+    @property
+    def is_stale(self):
+        """OKF v0.2 §5.5: stale when today >= stale_after."""
+        stale_after = self.frontmatter.get("stale_after")
+        if isinstance(stale_after, datetime):
+            stale_after = stale_after.date()
+        if hasattr(stale_after, "year"):  # datetime.date
+            return date.today() >= stale_after
+        if isinstance(stale_after, str) and stale_after:
+            try:
+                return date.today() >= date.fromisoformat(stale_after)
+            except ValueError:
+                return False
+        return False
 
     @property
     def is_index(self):
@@ -514,30 +565,55 @@ class OKFBuild:
             # 内页类型 - 简化显示，只用文字标签不要图标
             type_label = page.type.replace("_", " ").title() if not page.type == "Product Category" else ("目录" if page.lang == "zh" else "Directory")
             breadcrumb = self._breadcrumb(page)
-            timestamp = page.frontmatter.get("timestamp", "")
-            date_html = ""
-            if timestamp:
-                try:
-                    if isinstance(timestamp, datetime):
-                        dt = timestamp
-                    else:
-                        dt = datetime.fromisoformat(str(timestamp).replace("Z", "+00:00"))
-                    date_html = f'<time datetime="{dt.isoformat()}">{dt.strftime("%Y-%m-%d")}</time>'
-                except (ValueError, TypeError):
-                    pass
+            dt = page.updated_at
+            date_html = f'<time datetime="{dt.isoformat()}">{dt.strftime("%Y-%m-%d")}</time>' if dt else ""
+
+            # OKF v0.2 信号：status / stale_after / verified / sources
+            zh = page.lang == "zh"
+            status = page.frontmatter.get("status", "")
+            status_badge = ""
+            if status == "draft":
+                status_badge = f'<span class="status-badge draft">{"草稿" if zh else "Draft"}</span>'
+            elif status == "deprecated":
+                status_badge = f'<span class="status-badge deprecated">{"已废弃" if zh else "Deprecated"}</span>'
+            tier = page.trust_tier
+            verify_badge = ""
+            if tier == "human":
+                verify_badge = f'<span class="verify-badge human">{"✓ 已人工审核" if zh else "✓ Human-reviewed"}</span>'
+            elif tier == "machine":
+                verify_badge = f'<span class="verify-badge machine">{"已机器确认" if zh else "Machine-confirmed"}</span>'
+            banner = ""
+            if status == "deprecated":
+                banner = f'<div class="stale-banner deprecated-banner">{"⚠️ 此内容已废弃，仅供参考，请不再依赖。" if zh else "⚠️ This content is deprecated and kept for reference only."}</div>'
+            elif page.is_stale:
+                banner = f'<div class="stale-banner">{"⚠️ 此内容可能已过期，请注意核实。" if zh else "⚠️ This content may be out of date."}</div>'
+
+            sources_html = ""
+            if page.sources:
+                items = []
+                for s in page.sources:
+                    res = str(s.get("resource", ""))
+                    label = escape(str(s.get("title", "") or res))
+                    items.append(f'<li><a href="{escape(res)}">{label}</a></li>' if res.startswith("http") else f"<li>{label}</li>")
+                sources_html = f'''<div class="page-sources">
+                <h2>{"数据来源" if zh else "Sources"}</h2>
+                <ul>{"".join(items)}</ul>
+              </div>'''
 
             body_html = f"""
             <article class="content-page">
               <div class="page-header">
-                <div class="type-badge">{escape(type_label)}</div>
+                <div class="type-badge">{escape(type_label)}</div>{status_badge}{verify_badge}
                 <h1>{escape(page.title)}</h1>
                 {tags_html}
                 {breadcrumb}
-                {f'<div class="page-meta">{("最后更新" if page.lang == "zh" else "Updated")}: {date_html}</div>' if date_html else ''}
+                {f'<div class="page-meta">{("最后更新" if zh else "Updated")}: {date_html}</div>' if date_html else ''}
               </div>
+              {banner}
               <div class="page-body">
                 {page.body_html}
               </div>
+              {sources_html}
             </article>
             """
 
@@ -670,19 +746,8 @@ class OKFBuild:
     def _write_sitemap(self):
         urls = []
         for page in self.pages:
-            ts = page.frontmatter.get("timestamp", "")
-            lastmod = ""
-            if ts:
-                try:
-                    if isinstance(ts, datetime):
-                        dt = ts
-                    elif isinstance(ts, str):
-                        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-                    else:
-                        raise ValueError()
-                    lastmod = f"<lastmod>{dt.strftime('%Y-%m-%d')}</lastmod>"
-                except:
-                    pass
+            dt = page.updated_at
+            lastmod = f"<lastmod>{dt.strftime('%Y-%m-%d')}</lastmod>" if dt else ""
             urls.append(f"  <url><loc>{SITE_URL}{page.url}</loc>{lastmod}</url>")
         xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         xml += "\n".join(urls)

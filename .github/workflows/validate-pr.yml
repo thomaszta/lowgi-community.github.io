@@ -70,10 +70,18 @@ jobs:
                   errors.append(f"{fp}: Empty or invalid frontmatter")
                   continue
 
-              req = ['type', 'title', 'description', 'tags', 'timestamp']
+              req = ['type', 'title', 'description', 'tags']
               for field in req:
                   if field not in fm:
                       errors.append(f"{fp}: Missing required field '{field}'")
+
+              # OKF v0.2: generated 取代 timestamp（旧字段兼容）
+              if 'generated' not in fm and 'timestamp' not in fm:
+                  errors.append(f"{fp}: Missing 'generated' (or legacy 'timestamp') field")
+              if 'generated' in fm:
+                  gen = fm['generated']
+                  if not isinstance(gen, dict) or not gen.get('by') or not gen.get('at'):
+                      errors.append(f"{fp}: 'generated' must be a mapping with 'by' and 'at'")
 
               if fm.get('type') not in VALID_TYPES:
                   errors.append(f"{fp}: Invalid type '{fm.get('type')}'. Must be one of: {', '.join(sorted(VALID_TYPES))}")
@@ -81,8 +89,20 @@ jobs:
               if 'lang' not in fm:
                   errors.append(f"{fp}: Missing 'lang' field")
 
-              if fm.get('type') not in ('Knowledge Base Home', 'Product Category') and 'source' not in fm:
-                  errors.append(f"{fp}: Missing 'source' field for type '{fm.get('type')}'")
+              # OKF v0.2: sources 取代 source（旧字段兼容）
+              if fm.get('type') not in ('Knowledge Base Home', 'Product Category') and 'sources' not in fm and 'source' not in fm:
+                  errors.append(f"{fp}: Missing 'sources' (or legacy 'source') field for type '{fm.get('type')}'")
+              if 'sources' in fm:
+                  if not isinstance(fm['sources'], list):
+                      errors.append(f"{fp}: 'sources' must be a list")
+                  else:
+                      for s in fm['sources']:
+                          if not isinstance(s, dict) or not s.get('resource'):
+                              errors.append(f"{fp}: each 'sources' entry must have 'resource'")
+                              break
+
+              if 'status' in fm and fm['status'] not in ('draft', 'stable', 'deprecated'):
+                  errors.append(f"{fp}: Invalid status '{fm['status']}'. Must be one of: draft, stable, deprecated")
 
               if fm.get('type') == 'Product':
                   if 'brand' not in fm:

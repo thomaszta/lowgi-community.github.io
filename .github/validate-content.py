@@ -11,14 +11,17 @@ import re
 import yaml
 from pathlib import Path
 
-# 必填字段
+# 必填字段（OKF v0.2：generated 取代 timestamp，sources 取代 source，旧字段兼容）
 REQUIRED_FIELDS = {
-    'Food': ['type', 'title', 'description', 'tags', 'source', 'lang'],
-    'Product': ['type', 'title', 'description', 'gi_value', 'tags', 'source', 'lang'],
-    'Recipe': ['type', 'title', 'description', 'tags', 'source', 'lang'],
+    'Food': ['type', 'title', 'description', 'tags', 'lang'],
+    'Product': ['type', 'title', 'description', 'gi_value', 'tags', 'lang'],
+    'Recipe': ['type', 'title', 'description', 'tags', 'lang'],
     'Concept': ['type', 'title', 'description', 'lang'],
     'Guide': ['type', 'title', 'description', 'lang'],
 }
+
+# 需要来源字段（sources 或旧 source 其一）的类型
+SOURCE_TYPES = {'Food', 'Product', 'Recipe'}
 
 # 所有类型都需要 lang
 ALL_REQUIRED = ['lang']
@@ -71,7 +74,27 @@ def validate_frontmatter(file_path):
     if 'tags' in data:
         if not isinstance(data['tags'], list):
             errors.append("tags 必须是数组格式: [标签1, 标签2]")
-    
+
+    # OKF v0.2: sources 或旧 source 其一（部分类型）
+    if content_type in SOURCE_TYPES and 'sources' not in data and 'source' not in data:
+        errors.append("缺少来源字段: sources (或旧字段 source)")
+
+    # OKF v0.2 格式校验
+    if 'generated' in data:
+        gen = data['generated']
+        if not isinstance(gen, dict) or not gen.get('by') or not gen.get('at'):
+            errors.append("generated 必须是包含 by 和 at 的映射: { by: ..., at: ... }")
+    if 'sources' in data:
+        if not isinstance(data['sources'], list):
+            errors.append("sources 必须是列表格式")
+        else:
+            for s in data['sources']:
+                if not isinstance(s, dict) or not s.get('resource'):
+                    errors.append("sources 每个条目必须包含 resource 字段")
+                    break
+    if 'status' in data and data['status'] not in ('draft', 'stable', 'deprecated'):
+        errors.append(f"status 必须是 draft/stable/deprecated 之一，当前值: {data['status']}")
+
     return errors
 
 

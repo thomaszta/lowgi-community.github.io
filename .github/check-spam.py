@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 检查内容质量
-- source 字段是否填写
+- sources 字段是否填写
 - 是否包含黑名单食品（不是低GI的）
 """
 
@@ -48,14 +48,14 @@ def check_file(file_path):
     if not isinstance(data, dict):
         return [], []
     
-    # 检查 source 字段是否存在且非空
-    source_value = data.get('source', '').strip()
-    if not source_value:
-        # Food 和 Product 必须有 source
+    # 检查来源字段是否存在且非空（OKF v0.2 sources，兼容旧 source）
+    has_source = bool(data.get('sources')) or bool(str(data.get('source', '')).strip())
+    if not has_source:
+        # Food 和 Product 必须有来源
         content_type = data.get('type', '')
         if content_type in ['Food', 'Product']:
             # 警告而非错误，因为 CI 会区分 warning 和 error
-            warnings.append(f"⚠️ 建议添加 source 字段，注明数据来源")
+            warnings.append(f"⚠️ 建议添加 sources 字段，注明数据来源")
     
     # 检查标题是否在黑名单中
     title = data.get('title', '')
