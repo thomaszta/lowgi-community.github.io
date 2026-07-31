@@ -463,6 +463,7 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
     z-index: 98;
   }
 .sidebar-overlay.show { display: block; }
+}
 
 .main-content { padding: 20px 16px; }
 

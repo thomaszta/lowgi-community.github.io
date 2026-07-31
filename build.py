@@ -946,8 +946,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   searchResults.innerHTML = '<div class="search-hint">' + (isZh ? '输入关键词搜索食物、食谱和指南...' : 'Type to search foods, recipes, and guides...') + '</div>';
 })();
 
-/* Mobile bottom nav */
-(function(){
+/* Mobile bottom nav (runs after DOM ready: the #bottom-nav div is rendered after this script) */
+document.addEventListener('DOMContentLoaded', function(){
   var bn = document.getElementById('bottom-nav');
   if (!bn) return;
   bn.classList.add('show');
@@ -980,7 +980,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       menuBtn.click();
     });
   }
-})();
+});
 </script>
 <footer class="site-footer">
   <div class="footer-inner">
