@@ -25,7 +25,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pyyaml markdown
-          
+          pip show pyyaml
+
       - name: Validate YAML frontmatter
         run: |
           python .github/validate-content.py
