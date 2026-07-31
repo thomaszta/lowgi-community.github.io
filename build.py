@@ -804,6 +804,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     {t:'苹果', d:'纤维丰富的水果，GI低，含果胶', u:'foods/fruits/apple/', type:'水果', cat:'foods'},
     {t:'蓝莓', d:'抗氧化浆果，GI低，富含花青素', u:'foods/fruits/blueberry/', type:'水果', cat:'foods'},
     {t:'草莓', d:'低糖水果，富含维生素C', u:'foods/fruits/strawberry/', type:'水果', cat:'foods'},
+    {t:'梨', d:'水分丰富，膳食纤维含量高，低GI水果', u:'foods/fruits/pear/', type:'水果', cat:'foods'},
     {t:'柚子', d:'低GI柑橘类水果', u:'foods/fruits/grapefruit/', type:'水果', cat:'foods'},
     {t:'樱桃', d:'低GI水果，含天然褪黑素', u:'foods/fruits/cherry/', type:'水果', cat:'foods'},
     // 食材库 - 蔬菜
@@ -860,6 +861,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     {t:'Lentils', d:'Low-GI legume rich in protein', u:'en/foods/legumes/lentils/', type:'Legume', cat:'foods'},
     {t:'Apple', d:'Fiber-rich fruit with low GI', u:'en/foods/fruits/apple/', type:'Fruit', cat:'foods'},
     {t:'Blueberry', d:'Antioxidant-rich berry, low GI', u:'en/foods/fruits/blueberry/', type:'Fruit', cat:'foods'},
+    {t:'Pear', d:'Water-rich fruit with plenty of fiber, low GI', u:'en/foods/fruits/pear/', type:'Fruit', cat:'foods'},
     {t:'Strawberry', d:'Low-sugar fruit rich in vitamin C', u:'en/foods/fruits/strawberry/', type:'Fruit', cat:'foods'},
     {t:'Broccoli', d:'Cruciferous vegetable, very low GI', u:'en/foods/vegetables/broccoli/', type:'Vegetable', cat:'foods'},
     {t:'Spinach', d:'Leafy green with minimal blood sugar impact', u:'en/foods/vegetables/spinach/', type:'Vegetable', cat:'foods'},
