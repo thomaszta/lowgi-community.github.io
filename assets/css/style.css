@@ -85,6 +85,24 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
   font-size: 13px; font-weight: 600;
   color: var(--text-secondary);
 }
+/* SVG图标样式 */
+.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.nav-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+.nav-text {
+  vertical-align: middle;
+}
 .nav-item.has-children > a { font-weight: 600; }
 
 /* Main Content */
@@ -347,28 +365,102 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
 .bottom-nav button.active, .bottom-nav button:active {
   color: var(--primary);
 }
-.bottom-nav .bn-icon { font-size: 22px; margin-bottom: 2px; }
+.bottom-nav .bn-icon { 
+  width: 24px; 
+  height: 24px; 
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bottom-nav .bn-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
 .bottom-nav .bn-label { font-size: 11px; }
 
 @media (max-width: 768px) {
   .menu-toggle { display: flex; align-items: center; }
 
+  /* Header mobile */
+  .header-inner { padding: 0 16px; }
+  .logo { font-size: 16px; }
+  .lang-nav { display: none; }  /* Hide language nav on mobile, show in bottom nav if needed */
+
+  /* Layout mobile */
+  .layout { margin-top: var(--header-height); }
+  
+  /* Sidebar handled in first media block above */
+
   /* Homepage mobile */
   .hero-search h2 { font-size: 22px; }
   .hero-search input { font-size: 16px; padding: 12px 18px; }
 
-  .cta-buttons { flex-direction: column; align-items: stretch; gap: 12px; }
-  .cta-btn { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 14px 20px; }
-  .cta-btn .cta-icon { font-size: 24px; margin-bottom: 0; }
+  /* CTA Buttons - fix the conflict */
+  .cta-buttons { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 12px; 
+    padding: 0 8px;
+  }
+  .cta-btn { 
+    flex-direction: row; 
+    justify-content: flex-start; 
+    align-items: center;
+    gap: 12px; 
+    padding: 14px 20px; 
+    min-width: unset;
+    width: 100%;
+    text-align: left;
+  }
+  .cta-btn .cta-icon { font-size: 24px; margin-bottom: 0; margin-right: 8px; flex-shrink: 0; }
   .cta-btn .cta-text { font-size: 15px; }
+  .cta-btn .cta-desc { display: none; }  /* Hide desc on mobile to save space */
 
-  .category-cards { grid-template-columns: 1fr; gap: 12px; }
-  .card { flex-direction: row; flex-wrap: wrap; align-items: center; padding: 16px; }
-  .card-icon { font-size: 28px; margin-bottom: 0; margin-right: 12px; }
-  .card-title { flex: 1; }
-  .card-desc { width: 100%; margin: 4px 0 0; }
+  /* Category Cards */
+  .category-cards { 
+    grid-template-columns: 1fr; 
+    gap: 12px; 
+    padding: 0 8px;
+  }
+  .card { 
+    flex-direction: row; 
+    flex-wrap: nowrap;  /* Don't wrap, keep in one line if possible */
+    align-items: center; 
+    padding: 16px; 
+    min-height: 72px;
+  }
+  .card-icon { 
+    font-size: 28px; 
+    margin-bottom: 0; 
+    margin-right: 12px; 
+    flex-shrink: 0;
+  }
+  .card-title { 
+    font-size: 16px;
+    flex: 1; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-desc { 
+    display: none;  /* Hide desc on mobile */
+  }
   .card-meta { display: none; }
 
-  .new-user-guide { padding: 20px 16px; }
+  /* New User Guide */
+  .new-user-guide { padding: 20px 16px; margin: 24px 8px; }
   .guide-steps { flex-direction: column; gap: 12px; }
+  
+  /* Main content */
+  .main-content { 
+    padding: 16px 12px; 
+    padding-bottom: 80px;  /* Space for bottom nav */
+  }
+  
+  /* Page header */
+  .page-header h1 { font-size: 22px; }
 }

@@ -48,17 +48,26 @@ def dir_label(key, lang):
         return key
     return key.replace("-", " ").title()
 
-TYPE_ICONS = {
-    "Concept": "🧠",
-    "Food": "🥗",
-    "Food Category": "📁",
-    "Recipe": "🍳",
-    "Guide": "📖",
-    "FAQ": "❓",
-    "Product": "🏷️",
-    "Product Category": "📁",
-    "Knowledge Base Home": "🏠",
+# SVG Icons (Heroicons) - 简洁矢量图标
+SVG_ICONS = {
+    # 顶级分类图标
+    "foods": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 21h10M12 3v18M5.5 13.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3l5 5"/><path d="M3 8h6"/></svg>',
+    "recipes": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></svg>',
+    "products": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+    # 内页类型图标
+    "concept": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    "food": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+    "recipe": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/></svg>',
+    "guide": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    "product": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>',
+    # 底部导航图标
+    "home": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+    "search": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+    "menu": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
 }
+
+# 顶级分类目录（用于侧边栏）
+TOP_LEVEL_CATS = {"foods", "recipes", "products", "concepts", "community", "guides"}
 
 
 class OKFPage:
@@ -271,16 +280,19 @@ class OKFBuild:
                 current = current[part]["_children"]
         return tree
 
-    def nav_to_html(self, tree, lang, current_url, level=0):
+    def nav_to_html(self, tree, lang, current_url, level=0, parent_key=None):
         items = []
         keys = sorted(tree.keys())
         for key in keys:
             node = tree[key]
             page = node.get("_page")
             label = page.title if page else dir_label(key, lang)
+            
+            # 只在顶级分类(level=0)且是TOP_LEVEL_CATS时显示图标
             icon = ""
-            if page and page.type in TYPE_ICONS:
-                icon = TYPE_ICONS[page.type] + " "
+            if level == 0 and key in SVG_ICONS:
+                icon = f'<span class="nav-icon">{SVG_ICONS[key]}</span>'
+            
             children = node.get("_children", {})
             has_children = bool(children)
             li_class = "nav-item"
@@ -290,18 +302,18 @@ class OKFBuild:
             link = ""
             if page and not has_children:
                 rel = self._relative_path(current_url, page.url)
-                link = f'<a href="{rel}">{icon}{escape(label)}</a>'
+                link = f'<a href="{rel}">{icon}<span class="nav-text">{escape(label)}</span></a>'
             elif page and has_children:
                 rel = self._relative_path(current_url, page.url)
-                link = f'<a href="{rel}">{icon}{escape(label)}</a>'
+                link = f'<a href="{rel}">{icon}<span class="nav-text">{escape(label)}</span></a>'
             elif has_children:
-                link = f'<span class="nav-label">{icon}{escape(label)}</span>'
+                link = f'<span class="nav-label">{icon}<span class="nav-text">{escape(label)}</span></span>'
             else:
-                link = f'<span class="nav-label">{icon}{escape(label)}</span>'
+                link = f'<span class="nav-label">{icon}<span class="nav-text">{escape(label)}</span></span>'
 
             children_html = ""
             if has_children:
-                children_html = self.nav_to_html(children, lang, current_url, level + 1)
+                children_html = self.nav_to_html(children, lang, current_url, level + 1, key)
 
             items.append(f"<li class='{li_class}'>{link}{children_html}</li>")
 
@@ -351,11 +363,15 @@ class OKFBuild:
         html = html.replace("{{HOME_LABEL}}", "首页" if page.lang == "zh" else "Home")
         html = html.replace("{{SEARCH_LABEL}}", "搜索" if page.lang == "zh" else "Search")
         html = html.replace("{{MENU_LABEL}}", "菜单" if page.lang == "zh" else "Menu")
+        
+        # SVG图标替换
+        for icon_name, icon_svg in SVG_ICONS.items():
+            html = html.replace(f"{{{{SVG_ICONS[\"{icon_name}\"]}}}}", icon_svg)
 
         if is_home:
             body_html = self._render_home(page, tags_html)
         else:
-            icon = TYPE_ICONS.get(page.type, "")
+            # 内页类型 - 简化显示，只用文字标签不要图标
             type_label = page.type.replace("_", " ").title() if not page.type == "Product Category" else ("目录" if page.lang == "zh" else "Directory")
             breadcrumb = self._breadcrumb(page)
             timestamp = page.frontmatter.get("timestamp", "")
@@ -373,7 +389,7 @@ class OKFBuild:
             body_html = f"""
             <article class="content-page">
               <div class="page-header">
-                <div class="type-badge">{icon} {escape(type_label)}</div>
+                <div class="type-badge">{escape(type_label)}</div>
                 <h1>{escape(page.title)}</h1>
                 {tags_html}
                 {breadcrumb}
@@ -706,9 +722,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
 </footer>
 <div class="bottom-nav" id="bottom-nav">
-  <a href="{{LOGO_HREF}}" id="bn-home"><span class="bn-icon">🏠</span><span class="bn-label">{{HOME_LABEL}}</span></a>
-  <a href="#" id="bn-search"><span class="bn-icon">🔍</span><span class="bn-label">{{SEARCH_LABEL}}</span></a>
-  <button id="bn-menu"><span class="bn-icon">☰</span><span class="bn-label">{{MENU_LABEL}}</span></button>
+  <a href="{{LOGO_HREF}}" id="bn-home"><span class="bn-icon">{{SVG_ICONS["home"]}}</span><span class="bn-label">{{HOME_LABEL}}</span></a>
+  <a href="#" id="bn-search"><span class="bn-icon">{{SVG_ICONS["search"]}}</span><span class="bn-label">{{SEARCH_LABEL}}</span></a>
+  <button id="bn-menu"><span class="bn-icon">{{SVG_ICONS["menu"]}}</span><span class="bn-label">{{MENU_LABEL}}</span></button>
 </div>
 </body>
 </html>"""
