@@ -16,7 +16,11 @@ from html import escape
 import yaml
 import markdown
 
-SITE_URL = os.environ.get("SITE_URL", "https://thomaszta.github.io/lowgi-community.github.io")
+SITE_URL = os.environ.get("SITE_URL", "https://thomaszta.github.io/lowgi-community.github.io").rstrip("/")
+USE_RELATIVE = os.environ.get("LOCAL_DEV", "") == "1"
+# 决定资源路径：本地开发用根相对路径，生产用绝对URL
+# 使用 / 开头确保在任何页面深度下都能正确解析
+ASSET_BASE = "/" if USE_RELATIVE else SITE_URL
 CONTENT_DIR = "content"
 OUTPUT_DIR = "site"
 DEFAULT_LANG = "zh"
@@ -470,8 +474,8 @@ class OKFBuild:
 
         home_url = "/en/" if page.lang == "en" else "/"
         logo_href = self._relative_path(page.url, home_url)
-        css_href = SITE_URL + "/assets/css/style.css"
-        favicon_href = SITE_URL + "/assets/favicon.svg"
+        css_href = ASSET_BASE + "/assets/css/style.css"
+        favicon_href = ASSET_BASE + "/assets/favicon.svg"
         html = html.replace("{{LOGO_HREF}}", logo_href)
         html = html.replace("{{CSS_HREF}}", css_href)
         html = html.replace("{{FAVICON_HREF}}", favicon_href)
@@ -570,9 +574,9 @@ class OKFBuild:
         """.replace("__BASE__", SITE_URL)
         html = HTML_TEMPLATE
         html = html.replace("{{LANG}}", "zh")
-        html = html.replace("{{LOGO_HREF}}", SITE_URL + "/")
-        html = html.replace("{{CSS_HREF}}", SITE_URL + "/assets/css/style.css")
-        html = html.replace("{{FAVICON_HREF}}", SITE_URL + "/assets/favicon.svg")
+        html = html.replace("{{LOGO_HREF}}", "./")
+        html = html.replace("{{CSS_HREF}}", ASSET_BASE + "/assets/css/style.css")
+        html = html.replace("{{FAVICON_HREF}}", ASSET_BASE + "/assets/favicon.svg")
         html = html.replace("{{SITE_URL}}", SITE_URL)
         html = html.replace("{{TITLE}}", "404 — Page Not Found")
         html = html.replace("{{DESC}}", "404 — Page Not Found")
