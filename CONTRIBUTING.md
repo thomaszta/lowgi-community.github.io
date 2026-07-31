@@ -83,6 +83,10 @@ When adding a commercially available low-GI product:
 - Clear title describing the change
 - CI checks must pass before merging
 
+### PR Labels
+
+Type labels (`type: food`, `type: product`, `type: recipe`, `type: concept-guide`, `type: site`) and `lang: bilingual` are applied automatically based on changed files. Reviewers may add `lang: zh-only` / `lang: en-only` (translation needed), `status: needs-source` / `status: waiting-author` / `status: ready`, or close-as labels `r: spam` / `r: promotion` / `r: inaccurate-gi`.
+
 ---
 
 ## 贡献指南
@@ -145,6 +149,30 @@ When adding a commercially available low-GI product:
 
 - PR 标题清晰描述改动内容
 - CI 检查通过后方可合并
+
+## PR 标签说明
+
+**自动打标**（按改动路径）：
+
+| 标签 | 触发条件 |
+|------|---------|
+| `type: food` | 改动 `content/**/foods/**` |
+| `type: product` | 改动 `content/**/products/**` |
+| `type: recipe` | 改动 `content/**/recipes/**` |
+| `type: concept-guide` | 改动 `content/**/concepts/**` 或 `content/**/guides/**` |
+| `type: site` | 改动 `build.py`、`assets/`、`.github/` 等站点文件 |
+| `lang: bilingual` | 中英内容同时改动 |
+
+**审核者手动添加**：
+
+| 标签 | 含义 |
+|------|------|
+| `type: fix` | 内容勘误（GI 值错误、链接失效等） |
+| `lang: zh-only` / `lang: en-only` | 缺另一语言版本，待补译 |
+| `status: needs-source` | 缺数据来源或来源不可靠 |
+| `status: waiting-author` | 等待提交者修改 |
+| `status: ready` | 审核通过，可合并 |
+| `r: spam` / `r: promotion` / `r: inaccurate-gi` | 垃圾 PR / 含广告 / GI 值无法核实，直接关闭 |
 
 ## 审核流程
 
