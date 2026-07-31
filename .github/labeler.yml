@@ -1,28 +1,28 @@
 # 按 PR 改动路径自动打标（配合 actions/labeler@v5）
-# lang:* / status:* / r:* 标签由审核者手动添加
+# lang: zh-only / lang: en-only / status:* / r:* 标签由审核者手动添加
 
-type: food:
+"type: food":
   - changed-files:
       - any-glob-to-any-file:
           - 'content/**/foods/**'
 
-type: product:
+"type: product":
   - changed-files:
       - any-glob-to-any-file:
           - 'content/**/products/**'
 
-type: recipe:
+"type: recipe":
   - changed-files:
       - any-glob-to-any-file:
           - 'content/**/recipes/**'
 
-type: concept-guide:
+"type: concept-guide":
   - changed-files:
       - any-glob-to-any-file:
           - 'content/**/concepts/**'
           - 'content/**/guides/**'
 
-type: site:
+"type: site":
   - changed-files:
       - any-glob-to-any-file:
           - 'build.py'
@@ -31,7 +31,7 @@ type: site:
           - 'assets/**'
           - '.github/**'
 
-lang: bilingual:
+"lang: bilingual":
   - changed-files:
       - all-globs-to-any-file:
           - 'content/zh/**'
