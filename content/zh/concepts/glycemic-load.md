@@ -3,8 +3,9 @@ type: "Concept"
 title: "血糖负荷 (GL)"
 description: "GL值结合了食物GI值和碳水化合物含量，更准确地反映食物对血糖的实际影响。"
 tags: [GL, 血糖, 核心概念]
-source: "参考哈佛医学院、中国营养学会资料"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "参考哈佛医学院、中国营养学会资料"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

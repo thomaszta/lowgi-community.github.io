@@ -1,11 +1,11 @@
 ---
-okf_version: "0.1"
+okf_version: "0.2"
 type: "Knowledge Base Home"
 title: "Low-GI Knowledge Base"
 description: "Check food GI values · Find low-GI recipes · Manage your blood sugar"
 tags: [low-GI, diabetes, recipes, food-database]
 lang: "en"
-timestamp: 2026-06-21T10:00:00Z
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 <div class="hero-search">

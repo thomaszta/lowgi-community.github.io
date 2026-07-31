@@ -6,9 +6,10 @@ description: "Commercially available whole wheat bread with ≥50% whole wheat f
 gi_value: "Approx. 50-55"
 tags: [bread, whole-grain, breakfast, low-GI]
 purchase: "Available at major supermarkets and online retailers"
-source: "Based on product nutrition labels"
+sources:
+  - resource: "Based on product nutrition labels"
 lang: "en"
-timestamp: 2026-06-21T13:00:00Z
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
 ---
 
 # Whole Wheat Bread

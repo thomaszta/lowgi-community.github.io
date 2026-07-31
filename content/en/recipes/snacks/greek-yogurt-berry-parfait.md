@@ -3,8 +3,9 @@ type: "Recipe"
 title: "Greek Yogurt Berry Parfait"
 description: "A high-protein, low-carb layered dessert that satisfies sweet cravings without spiking blood sugar."
 tags: [snack, yogurt, berry, low-GI, high-protein]
-source: "Community-verified recipe"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "Community-verified recipe"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

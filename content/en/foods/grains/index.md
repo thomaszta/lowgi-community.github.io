@@ -4,8 +4,9 @@ title: "Grains"
 description: "Low-GI grains and whole-grain options for a healthy diet."
 tags: [grains, low-GI, whole-grains]
 lang: "en"
-source: "Community contributions"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "Community contributions"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # Grains

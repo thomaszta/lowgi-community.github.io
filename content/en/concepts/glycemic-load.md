@@ -3,8 +3,9 @@ type: "Concept"
 title: "Glycemic Load (GL)"
 description: "GL combines GI value and carbohydrate content for a more accurate measure of a food's actual blood sugar impact."
 tags: [GL, blood-sugar, core-concept]
-source: "References from Harvard Medical School and the Chinese Nutrition Society"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Harvard Medical School and the Chinese Nutrition Society"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

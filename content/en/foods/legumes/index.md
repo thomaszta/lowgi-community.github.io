@@ -4,8 +4,9 @@ title: "Legumes"
 description: "Low-GI legumes — high-protein, high-fiber healthy choices."
 tags: [legumes, low-GI, high-protein]
 lang: "en"
-source: "Community contribution"
-timestamp: 2026-06-22T15:00:00Z
+sources:
+  - resource: "Community contribution"
+generated: { by: human:community, at: 2026-06-22T15:00:00Z }
 ---
 
 # Legumes

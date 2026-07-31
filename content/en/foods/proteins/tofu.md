@@ -3,8 +3,9 @@ type: "Food"
 title: "Tofu"
 description: "A plant-based quality protein source — low GI and rich in isoflavones."
 tags: [protein, plant-protein, low-GI, vegetarian]
-source: "References from Open Food Facts"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Open Food Facts"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

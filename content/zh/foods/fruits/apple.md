@@ -3,8 +3,9 @@ type: "Food"
 title: "苹果 (Apple)"
 description: "富含可溶性纤维和抗氧化物质，是低GI水果的代表。"
 tags: [水果, 低GI, 高纤维, 维生素]
-source: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

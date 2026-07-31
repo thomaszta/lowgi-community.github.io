@@ -6,8 +6,9 @@ gi_value: 40
 gl_value: 2
 tags: [水果, 维生素C, 抗氧化]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-07-31T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-07-31T10:00:00Z }
 ---
 
 # 草莓

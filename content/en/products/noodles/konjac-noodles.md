@@ -6,9 +6,10 @@ description: "Noodle alternative made from konjac flour (glucomannan) — virtua
 gi_value: "Approx. 0-5"
 tags: [noodles, konjac, low-carb, very-low-GI]
 purchase: "Available at major supermarkets, online retailers, and health food stores"
-source: "Based on product nutrition labels and published nutritional data"
+sources:
+  - resource: "Based on product nutrition labels and published nutritional data"
 lang: "en"
-timestamp: 2026-06-21T13:00:00Z
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
 ---
 
 # Konjac Noodles

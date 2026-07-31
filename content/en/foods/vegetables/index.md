@@ -4,8 +4,9 @@ title: "Vegetables"
 description: "Low-GI vegetables — nutrient-dense choices for diabetes management."
 tags: [vegetables, low-GI, nutrition]
 lang: "en"
-source: "Community contributions"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "Community contributions"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # Vegetables

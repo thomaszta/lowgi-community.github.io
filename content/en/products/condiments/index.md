@@ -4,8 +4,9 @@ title: "Low-GI Condiments"
 description: "Commercially available low-GI condiment products."
 tags: [low-GI, condiments, commercial-products]
 lang: "en"
-source: "Community contributions"
-timestamp: 2026-06-21T13:00:00Z
+sources:
+  - resource: "Community contributions"
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
 ---
 
 # Low-GI Condiments

@@ -4,8 +4,9 @@ title: "鹰嘴豆 (Chickpeas)"
 description: "高蛋白、高纤维的豆类，GI值极低，是糖尿病人的理想蛋白质来源。"
 tags: [豆类, 低GI, 高蛋白, 高纤维, 素食]
 lang: "zh"
-source: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
-timestamp: 2026-06-22T15:00:00Z
+sources:
+  - resource: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
+generated: { by: human:community, at: 2026-06-22T15:00:00Z }
 ---
 
 # 鹰嘴豆

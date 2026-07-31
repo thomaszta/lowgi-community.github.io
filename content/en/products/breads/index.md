@@ -4,8 +4,9 @@ title: "Low-GI Breads"
 description: "Commercially available low-GI bread products."
 tags: [low-GI, bread, commercial-products]
 lang: "en"
-source: "Community contributions"
-timestamp: 2026-06-21T13:00:00Z
+sources:
+  - resource: "Community contributions"
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
 ---
 
 # Low-GI Breads

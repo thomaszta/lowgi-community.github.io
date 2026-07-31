@@ -4,8 +4,9 @@ title: "豆类"
 description: "低GI豆类食材，高蛋白高纤维的健康选择。"
 tags: [豆类, 低GI, 高蛋白]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-22T15:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-22T15:00:00Z }
 ---
 
 # 豆类

@@ -3,8 +3,9 @@ type: "Guide"
 title: "How to Read Food Labels"
 description: "Learn to understand nutrition facts panels and ingredient lists to make better low-GI food choices."
 tags: [guide, food-labels, shopping, nutrition]
-source: "References from FDA Nutrition Facts guidelines"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from FDA Nutrition Facts guidelines"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

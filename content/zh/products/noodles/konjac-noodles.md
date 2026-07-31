@@ -6,9 +6,10 @@ description: "以魔芋精粉为主要原料制成的面条替代品，几乎不
 gi_value: "约 0-5"
 tags: [面条, 魔芋, 低碳水, 极低GI]
 purchase: "大型超市、线上电商平台、健康食品店均有售"
-source: "参考产品包装营养标签及公开营养数据"
+sources:
+  - resource: "参考产品包装营养标签及公开营养数据"
 lang: "zh"
-timestamp: 2026-06-21T13:00:00Z
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
 ---
 
 # 魔芋面 / 蒟蒻面

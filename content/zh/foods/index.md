@@ -4,8 +4,9 @@ title: "食材库"
 description: "100+ 食物的 GI 值，按类别浏览"
 tags: [食材, GI, 食物库]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # 食材库

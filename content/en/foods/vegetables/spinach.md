@@ -3,8 +3,9 @@ type: "Food"
 title: "Spinach"
 description: "A nutrient-dense leafy green with a very low GI, ideal for daily diabetes-friendly meals."
 tags: [vegetable, low-GI, leafy-green, nutrient-dense]
-source: "References from Open Food Facts"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Open Food Facts"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

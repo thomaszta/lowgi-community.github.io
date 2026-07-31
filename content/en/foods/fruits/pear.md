@@ -4,8 +4,9 @@ title: "Pear"
 description: "A low-GI fruit with high water content and plenty of dietary fiber."
 gi_value: 38
 tags: [fruit, low-GI, high-fiber, vitamins]
-source: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
-timestamp: 2026-07-31T14:40:00Z
+sources:
+  - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
+generated: { by: human:community, at: 2026-07-31T14:40:00Z }
 lang: "en"
 ---
 

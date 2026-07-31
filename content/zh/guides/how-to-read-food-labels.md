@@ -3,8 +3,9 @@ type: "Guide"
 title: "如何阅读食品标签"
 description: "学会看懂营养成分表和配料表，帮助做出更好的低GI食品选择。"
 tags: [指南, 食品标签, 选购, 营养成分]
-source: "参考中国《预包装食品营养标签通则》"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "参考中国《预包装食品营养标签通则》"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

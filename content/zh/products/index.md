@@ -4,8 +4,9 @@ title: "低GI成品食品"
 description: "市面上销售的经过验证的低GI成品食品汇总，涵盖面包、面条、零食、饮品等品类。"
 tags: [低GI, 成品食品, 商业产品]
 lang: "zh"
-timestamp: 2026-06-21T13:00:00Z
-source: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
+sources:
+  - resource: "社区贡献"
 ---
 
 # 低GI成品食品

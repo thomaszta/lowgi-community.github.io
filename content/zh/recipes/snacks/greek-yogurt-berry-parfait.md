@@ -3,8 +3,9 @@ type: "Recipe"
 title: "希腊酸奶莓果芭菲"
 description: "高蛋白、低碳水分层甜点，满足甜食欲望而不影响血糖。"
 tags: [零食, 酸奶, 浆果, 低GI, 高蛋白]
-source: "社区验证食谱"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "社区验证食谱"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

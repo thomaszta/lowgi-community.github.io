@@ -6,9 +6,10 @@ description: "市售全麦面包，全麦粉含量≥50%，无添加蔗糖，适
 gi_value: "约 50-55"
 tags: [面包, 全谷物, 早餐, 低GI]
 purchase: "大型超市、线上电商平台均有售"
-source: "参考产品包装营养标签"
+sources:
+  - resource: "参考产品包装营养标签"
 lang: "zh"
-timestamp: 2026-06-21T13:00:00Z
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
 ---
 
 # 全麦面包

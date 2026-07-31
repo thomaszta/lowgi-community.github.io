@@ -3,8 +3,9 @@ type: "FAQ"
 title: "常见问题"
 description: "关于低GI饮食和本知识库的常见问题解答。"
 tags: [FAQ, 社区, 帮助]
-source: "社区共建"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "社区共建"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

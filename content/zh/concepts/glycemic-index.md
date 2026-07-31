@@ -3,8 +3,9 @@ type: "Concept"
 title: "血糖生成指数 (GI)"
 description: "GI值是衡量食物引起血糖升高程度的指标，是糖尿病人饮食管理的重要工具。"
 tags: [GI, 血糖, 核心概念]
-source: "参考哈佛医学院、中国营养学会资料"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "参考哈佛医学院、中国营养学会资料"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

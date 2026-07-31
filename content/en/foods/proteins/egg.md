@@ -3,8 +3,9 @@ type: "Food"
 title: "Egg"
 description: "A nutritionally complete, high-quality protein source — very low carb and GL."
 tags: [protein, egg, low-GI, high-protein, breakfast]
-source: "References from Open Food Facts"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Open Food Facts"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

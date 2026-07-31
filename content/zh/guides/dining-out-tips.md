@@ -3,8 +3,9 @@ type: "Guide"
 title: "外出就餐小贴士"
 description: "在餐厅如何坚持低GI饮食的实用建议。"
 tags: [指南, 外出就餐, 实用建议]
-source: "社区经验总结"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "社区经验总结"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

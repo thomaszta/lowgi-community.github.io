@@ -4,8 +4,9 @@ title: "Snack Recipes"
 description: "Low-GI snack recipes for healthy eating between meals."
 tags: [recipes, snacks, low-GI]
 lang: "en"
-source: "Community contributions"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "Community contributions"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # Snacks

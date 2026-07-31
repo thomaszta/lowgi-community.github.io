@@ -4,8 +4,9 @@ title: "梨 (Pear)"
 description: "水分丰富，膳食纤维含量高，是低GI水果之一。"
 gi_value: 38
 tags: [水果, 低GI, 高纤维, 维生素]
-source: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
-timestamp: 2026-07-31T19:00:00Z
+sources:
+  - resource: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"
+generated: { by: human:community, at: 2026-07-31T19:00:00Z }
 lang: "zh"
 ---
 

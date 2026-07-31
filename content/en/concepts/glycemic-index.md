@@ -3,8 +3,9 @@ type: "Concept"
 title: "Glycemic Index (GI)"
 description: "GI measures how quickly a food raises blood sugar levels — a key tool for diabetes dietary management."
 tags: [GI, blood-sugar, core-concept]
-source: "References from Harvard Medical School and the Chinese Nutrition Society"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Harvard Medical School and the Chinese Nutrition Society"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

@@ -4,8 +4,9 @@ title: "早餐食谱"
 description: "低GI早餐食谱"
 tags: [食谱, 早餐, 低GI]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # 早餐

@@ -4,8 +4,9 @@ title: "谷物"
 description: "低GI谷物和全谷物"
 tags: [谷物, GI, 全谷物]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # 谷物

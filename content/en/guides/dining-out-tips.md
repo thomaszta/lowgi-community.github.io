@@ -3,8 +3,9 @@ type: "Guide"
 title: "Dining Out Tips"
 description: "Practical advice for sticking to a low-GI diet when eating at restaurants."
 tags: [guide, dining-out, practical-tips]
-source: "Community experience"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "Community experience"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

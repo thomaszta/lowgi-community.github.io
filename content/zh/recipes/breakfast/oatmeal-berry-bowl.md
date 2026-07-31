@@ -3,8 +3,9 @@ type: "Recipe"
 title: "燕麦蓝莓碗"
 description: "以传统燕麦片为基底，搭配新鲜蓝莓和坚果的低GI早餐。"
 tags: [早餐, 燕麦, 蓝莓, 低GI, 高纤维]
-source: "社区验证食谱"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "社区验证食谱"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

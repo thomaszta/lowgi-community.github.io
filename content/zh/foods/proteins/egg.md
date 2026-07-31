@@ -3,8 +3,9 @@ type: "Food"
 title: "鸡蛋 (Egg)"
 description: "营养全面的优质蛋白质来源，低碳水、GL值极低。"
 tags: [蛋白质, 鸡蛋, 低GI, 高蛋白, 早餐]
-source: "参考 Open Food Facts 数据"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "参考 Open Food Facts 数据"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "zh"
 ---
 

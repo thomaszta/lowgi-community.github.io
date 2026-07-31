@@ -3,8 +3,9 @@ type: "Food"
 title: "Brown Rice"
 description: "A whole grain that retains its bran and germ, with a lower GI than white rice."
 tags: [grain, staple, medium-GI, whole-grain]
-source: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

@@ -4,8 +4,9 @@ title: "蛋白质"
 description: "低GI蛋白质来源"
 tags: [蛋白质, GI]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # 蛋白质

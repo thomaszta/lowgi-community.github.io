@@ -4,8 +4,9 @@ title: "食谱库"
 description: "20+ 低 GI 食谱，按类别浏览"
 tags: [食谱, 烹饪, 低GI]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # 食谱库

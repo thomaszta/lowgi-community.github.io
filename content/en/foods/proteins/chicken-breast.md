@@ -3,8 +3,9 @@ type: "Food"
 title: "Chicken Breast"
 description: "A high-protein, low-carbohydrate quality protein source with virtually no impact on blood sugar."
 tags: [protein, meat, low-GI, high-protein, low-carb]
-source: "References from Open Food Facts"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Open Food Facts"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

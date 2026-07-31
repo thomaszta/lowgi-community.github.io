@@ -1,11 +1,11 @@
 ---
-okf_version: "0.1"
+okf_version: "0.2"
 type: "Knowledge Base Home"
 title: "低GI知识库"
 description: "查食物GI值 · 找低GI食谱 · 轻松管理血糖"
 tags: [低GI, 糖尿病, 食谱, 食物库]
 lang: "zh"
-timestamp: 2026-06-21T10:00:00Z
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 <div class="hero-search">

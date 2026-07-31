@@ -3,8 +3,9 @@ type: "Recipe"
 title: "Oatmeal Berry Bowl"
 description: "A low-GI breakfast built on rolled oats, fresh blueberries, and nuts."
 tags: [breakfast, oatmeal, blueberry, low-GI, high-fiber]
-source: "Community-verified recipe"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "Community-verified recipe"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 

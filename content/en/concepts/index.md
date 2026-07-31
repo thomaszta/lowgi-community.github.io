@@ -4,8 +4,9 @@ title: "Core Concepts"
 description: "Understand glycemic index (GI) and glycemic load (GL) and their role in diabetes management."
 tags: [concepts, GI, GL, diabetes]
 lang: "en"
-source: "Community contributions"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "Community contributions"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # Core Concepts

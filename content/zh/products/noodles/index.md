@@ -4,8 +4,9 @@ title: "低GI面条类"
 description: "市售低GI面条产品列表。"
 tags: [低GI, 面条, 成品食品]
 lang: "zh"
-timestamp: 2026-06-21T13:00:00Z
-source: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T13:00:00Z }
+sources:
+  - resource: "社区贡献"
 ---
 
 # 低GI面条类

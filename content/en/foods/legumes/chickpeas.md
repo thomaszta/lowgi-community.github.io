@@ -4,8 +4,9 @@ title: "Chickpeas (Garbanzo Beans)"
 description: "High-protein, high-fiber legumes with a very low GI — an ideal protein source for diabetes management."
 tags: [legumes, low-GI, high-protein, high-fiber, vegan]
 lang: "en"
-source: "References from Open Food Facts and Harvard School of Public Health"
-timestamp: 2026-06-22T15:00:00Z
+sources:
+  - resource: "References from Open Food Facts and Harvard School of Public Health"
+generated: { by: human:community, at: 2026-06-22T15:00:00Z }
 ---
 
 # Chickpeas

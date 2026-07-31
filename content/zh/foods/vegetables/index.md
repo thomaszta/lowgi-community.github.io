@@ -4,8 +4,9 @@ title: "蔬菜"
 description: "低GI蔬菜"
 tags: [蔬菜, GI]
 lang: "zh"
-source: "社区贡献"
-timestamp: 2026-06-21T10:00:00Z
+sources:
+  - resource: "社区贡献"
+generated: { by: human:community, at: 2026-06-21T10:00:00Z }
 ---
 
 # 蔬菜
