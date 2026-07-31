@@ -1,5 +1,5 @@
 ---
-type: "Food Category"
+type: "Food"
 title: "Fruits"
 description: "Low-GI fruits suitable for a diabetes-friendly diet."
 tags: [fruits, low-GI, diabetes]
