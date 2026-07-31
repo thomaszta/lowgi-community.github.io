@@ -35,7 +35,7 @@
 ## 检查清单
 
 - [ ] 我已阅读 [贡献指南](https://github.com/thomaszta/lowgi-community.github.io/blob/master/CONTRIBUTING.md)
-- [ ] 文件格式符合要求（YAML frontmatter 完整）
+- [ ] 文件格式符合 OKF v0.2 要求（YAML frontmatter 完整，含 `generated` 与 `sources`）
 - [ ] GI 值在合理范围内 (0-100)
 - [ ] 不包含广告、购买链接或联系方式
 - [ ] 内容为中文（如提交英文版本请注明）

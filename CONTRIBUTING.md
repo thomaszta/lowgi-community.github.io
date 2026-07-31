@@ -13,15 +13,17 @@ Thank you for considering contributing to the Low-GI Community Knowledge Base!
 
 ## File Standards (OKF Requirements)
 
-All knowledge files must include YAML frontmatter:
+All knowledge files must include YAML frontmatter (this site follows **OKF v0.2**):
 
 - `type` — **Required**. e.g., `Food`, `Recipe`, `Concept`, `Guide`
 - `title` — Recommended
 - `description` — Recommended
 - `tags` — Recommended (use English tags for cross-language search)
-- `source` — Recommended — cite your information sources
-- `timestamp` — Recommended (ISO 8601 format)
+- `sources` — Recommended — list of origins the content derives from, each with a `resource` (legacy single-string `source` is still accepted)
+- `generated` — Recommended — `{ by: human:your-name, at: <ISO 8601> }`, who/when produced the content (legacy `timestamp` is still accepted)
 - `lang` — Recommended — language code, e.g., `zh`, `en`
+
+Optional OKF v0.2 signals: `status` (`draft` / `stable` / `deprecated`), `stale_after` (`YYYY-MM-DD`, page shows an expiry notice on/after this date), `verified` (`{ by: human:reviewer, at: ... }`, page shows a trust badge).
 
 ### Example
 
@@ -31,8 +33,9 @@ type: "Food"
 title: "Rolled Oats"
 description: "Minimally processed rolled oats, a classic low-GI staple."
 tags: [grain, breakfast, low-GI, high-fiber]
-source: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
-timestamp: 2026-06-21T11:00:00Z
+sources:
+  - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"
+generated: { by: human:community, at: 2026-06-21T11:00:00Z }
 lang: "en"
 ---
 
@@ -58,8 +61,9 @@ When adding a commercially available low-GI product:
   gi_value: "Approx. 50-55"
   tags: [bread, whole-grain, low-GI]
   purchase: "Available at major supermarkets"
-  source: "Based on product nutrition label"
-  timestamp: 2026-06-21T13:00:00Z
+  sources:
+    - resource: "Based on product nutrition label"
+  generated: { by: human:community, at: 2026-06-21T13:00:00Z }
   lang: "en"
   ---
   ```
@@ -102,15 +106,17 @@ Type labels (`type: food`, `type: product`, `type: recipe`, `type: concept-guide
 
 ## 文件规范（OKF 要求）
 
-所有知识文件必须包含 YAML 元数据头：
+所有知识文件必须包含 YAML 元数据头（本站遵循 **OKF v0.2**）：
 
 - `type` — **必须**，例如 `Food`、`Recipe`、`Concept`、`Guide`
 - `title` — 推荐
 - `description` — 推荐
 - `tags` — 推荐（建议使用英文标签，便于跨语言检索）
-- `source` — 推荐，注明信息来源
-- `timestamp` — 推荐（ISO 8601 格式）
+- `sources` — 推荐，内容来源列表，每条含 `resource`（旧的单字符串 `source` 字段仍然兼容）
+- `generated` — 推荐，`{ by: human:你的名字, at: <ISO 8601> }`，记录内容产生者与时间（旧的 `timestamp` 字段仍然兼容）
 - `lang` — 推荐，语言代码，如 `zh`、`en`
+
+OKF v0.2 可选信号：`status`（`draft` 草稿 / `stable` 稳定 / `deprecated` 已废弃）、`stale_after`（`YYYY-MM-DD`，到期后页面会显示过期提示）、`verified`（`{ by: human:审核人, at: ... }`，页面显示信任徽章）。
 
 ## 成品食品提交规范
 
@@ -131,8 +137,9 @@ Type labels (`type: food`, `type: product`, `type: recipe`, `type: concept-guide
   gi_value: "约 50-55"
   tags: [面包, 全谷物, 低GI]
   purchase: "大型超市、线上电商平台有售"
-  source: "参考产品包装营养标签"
-  timestamp: 2026-06-21T13:00:00Z
+  sources:
+    - resource: "参考产品包装营养标签"
+  generated: { by: human:community, at: 2026-06-21T13:00:00Z }
   lang: "zh"
   ---
   ```
