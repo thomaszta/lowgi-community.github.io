@@ -259,6 +259,14 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
 .status-badge.deprecated { background: #fee2e2; color: #991b1b; }
 .verify-badge.human { background: #dcfce7; color: #166534; }
 .verify-badge.machine { background: #dbeafe; color: #1e40af; }
+.gi-chip {
+  display: inline-block; font-size: 13px; font-weight: 600;
+  padding: 2px 10px; border-radius: var(--radius);
+  margin-bottom: 8px; margin-left: 6px;
+}
+.gi-chip.gi-low { background: #dcfce7; color: #166534; }
+.gi-chip.gi-mid { background: #fef3c7; color: #92400e; }
+.gi-chip.gi-high { background: #fee2e2; color: #991b1b; }
 .stale-banner {
   margin: 12px 0; padding: 10px 14px;
   border-radius: var(--radius);
@@ -497,7 +505,8 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
 .bottom-nav {
   display: none;
   position: fixed; bottom: 0; left: 0; right: 0;
-  height: 56px;
+  height: calc(56px + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   background: var(--surface);
   border-top: 1px solid var(--border);
   z-index: 100;
@@ -620,4 +629,53 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
   
   /* Page header */
   .page-header h1 { font-size: 22px; }
+}
+
+/* ==================== */
+/* DARK MODE (system)  */
+/* ==================== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #131816;
+    --surface: #1c2420;
+    --text: #e6eae7;
+    --text-secondary: #9aa5a0;
+    --primary: #74c69d;
+    --primary-light: #95d5b2;
+    --primary-dark: #52b788;
+    --accent: #52b788;
+    --accent-light: #1f2f27;
+    --border: #2e3a34;
+    --tag-bg: #1f2f27;
+    --tag-text: #95d5b2;
+  }
+
+  /* 徽章 / 横幅 / GI 芯片：深色低饱和变体 */
+  .status-badge.draft { background: #42360f; color: #ebc96b; }
+  .status-badge.deprecated { background: #451a1a; color: #ef9a9a; }
+  .verify-badge.human { background: #16301f; color: #7ed59b; }
+  .verify-badge.machine { background: #16283f; color: #8ab4f0; }
+  .gi-chip.gi-low { background: #16301f; color: #7ed59b; }
+  .gi-chip.gi-mid { background: #42360f; color: #ebc96b; }
+  .gi-chip.gi-high { background: #451a1a; color: #ef9a9a; }
+  .stale-banner { background: #33250f; color: #e8b06a; border-color: #57400f; }
+  .stale-banner.deprecated-banner { background: #3d1717; color: #ef9a9a; border-color: #5c2121; }
+
+  /* 正文元素 */
+  .page-body blockquote { background: #1c2922; }
+  .page-body code { background: #2a3230; }
+  .page-body pre { background: #0f1512; }
+
+  /* 首页卡片 / CTA / 新手指南 */
+  .card-foods { background: linear-gradient(135deg, #173322 0%, #1e4030 100%); border-color: #2d5a40; }
+  .card-recipes { background: linear-gradient(135deg, #3a2f10 0%, #4a3c14 100%); border-color: #6b5518; }
+  .card-products { background: linear-gradient(135deg, #16283f 0%, #1d3450 100%); border-color: #2c4a73; }
+  .cta-secondary { background: #2a1c0e; }
+  .cta-tertiary { background: #14203a; }
+  .new-user-guide {
+    background: linear-gradient(135deg, #16283f 0%, #1a3050 100%);
+    border-color: #2c4a73;
+  }
+  .card:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
 }

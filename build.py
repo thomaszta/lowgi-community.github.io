@@ -68,7 +68,20 @@ SVG_ICONS = {
     "home": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
     "search": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
     "menu": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+    "globe": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
 }
+
+# 内页类型徽章双语标签
+TYPE_LABELS = {
+    "zh": {"Food": "食材", "Recipe": "食谱", "Concept": "概念", "Guide": "指南",
+           "Product": "成品食品", "FAQ": "常见问题", "Product Category": "目录",
+           "Knowledge Base Home": "首页", "Log": "日志"},
+    "en": {"Product Category": "Directory"},
+}
+
+def type_label(type_value, lang):
+    """页面类型的显示标签（双语），未知类型回退为 Title Case。"""
+    return TYPE_LABELS.get(lang, {}).get(type_value) or type_value.replace("_", " ").title()
 
 # 顶级分类目录（用于侧边栏）
 TOP_LEVEL_CATS = {"foods", "recipes", "products", "concepts", "community", "guides", "log"}
@@ -525,6 +538,35 @@ class OKFBuild:
                 result += f'<a href="{other_home}" class="lang-link">{label}</a>'
         return result
 
+    def get_lang_switch_target(self, page):
+        """返回 (href, label)，供移动端底部导航的语言切换使用。"""
+        counterpart = self.lang_versions.get(page)
+        lang = "en" if page.lang == "zh" else "zh"
+        label = "English" if lang == "en" else "中文"
+        if counterpart:
+            return self._relative_path(page.url, counterpart.url), label
+        return self._relative_path(page.url, "/en/" if lang == "en" else "/"), label
+
+    def search_index_json(self, lang):
+        """从页面 frontmatter 自动生成搜索索引（替代原先硬编码的 pageIndex）。"""
+        entries = []
+        for page in self.pages:
+            if page.lang != lang:
+                continue
+            url = page.url.lstrip("/")
+            segs = [s for s in url.split("/") if s]
+            if page.lang != DEFAULT_LANG and segs and segs[0] == page.lang:
+                segs = segs[1:]
+            cat = segs[0] if segs else "home"
+            entries.append({
+                "t": page.title or page.source_rel.rsplit("/", 1)[-1],
+                "d": page.description,
+                "u": url,
+                "type": type_label(page.type, lang),
+                "cat": cat,
+            })
+        return json.dumps(entries, ensure_ascii=False).replace("</", "<\\/")
+
     def render_html(self, page):
         nav_html = self.nav_to_html(self.build_nav_tree(page.lang), page.lang, page.url)
         lang_switch = self.get_lang_switch_html(page)
@@ -554,6 +596,13 @@ class OKFBuild:
         html = html.replace("{{SEARCH_LABEL}}", "搜索" if page.lang == "zh" else "Search")
         html = html.replace("{{MENU_LABEL}}", "菜单" if page.lang == "zh" else "Menu")
         html = html.replace("{{SEARCH_PLACEHOLDER}}", "搜索食物、食谱、指南..." if page.lang == "zh" else "Search foods, recipes, guides...")
+        html = html.replace("{{ARIA_MENU}}", "打开导航菜单" if page.lang == "zh" else "Toggle navigation")
+        html = html.replace("{{ARIA_SEARCH}}", "搜索" if page.lang == "zh" else "Search")
+        bn_lang_href, bn_lang_label = self.get_lang_switch_target(page)
+        html = html.replace("{{BN_LANG_HREF}}", bn_lang_href)
+        html = html.replace("{{BN_LANG_LABEL}}", bn_lang_label)
+        html = html.replace("{{PAGE_INDEX_ZH}}", self.search_index_json("zh"))
+        html = html.replace("{{PAGE_INDEX_EN}}", self.search_index_json("en"))
         
         # SVG图标替换
         for icon_name, icon_svg in SVG_ICONS.items():
@@ -563,18 +612,27 @@ class OKFBuild:
             body_html = self._render_home(page, tags_html)
         else:
             # 内页类型徽章（双语）
-            TYPE_LABELS = {
-                "zh": {"Food": "食材", "Recipe": "食谱", "Concept": "概念", "Guide": "指南",
-                       "Product": "成品食品", "FAQ": "常见问题", "Product Category": "目录",
-                       "Knowledge Base Home": "首页", "Log": "日志"},
-                "en": {"Product Category": "Directory"},
-            }
-            type_label = TYPE_LABELS.get(page.lang, {}).get(page.type) or page.type.replace("_", " ").title()
+            type_label_text = type_label(page.type, page.lang)
             breadcrumb = self._breadcrumb(page)
             dt = page.updated_at
             date_html = f'<time datetime="{dt.isoformat()}">{dt.strftime("%Y-%m-%d")}</time>' if dt else ""
             # 正文首个 h1 与页头标题重复，去掉（移动端减少一屏内的重复标题）
             content_html = re.sub(r"^\s*<h1[^>]*>.*?</h1>\s*", "", page.body_html, count=1, flags=re.S)
+
+            # GI 值芯片（≤55 低GI 绿 / 56-69 中GI 黄 / ≥70 高GI 红）
+            gi_chip = ""
+            gi_value = page.frontmatter.get("gi_value")
+            if gi_value is not None:
+                m = re.search(r"\d+", str(gi_value))
+                if m:
+                    gi_num = int(m.group())
+                    if gi_num <= 55:
+                        gi_cls, gi_text = "gi-low", ("低GI" if page.lang == "zh" else "Low GI")
+                    elif gi_num <= 69:
+                        gi_cls, gi_text = "gi-mid", ("中GI" if page.lang == "zh" else "Mid GI")
+                    else:
+                        gi_cls, gi_text = "gi-high", ("高GI" if page.lang == "zh" else "High GI")
+                    gi_chip = f'<span class="gi-chip {gi_cls}">GI {gi_num} · {gi_text}</span>'
 
             # OKF v0.2 信号：status / stale_after / verified / sources
             zh = page.lang == "zh"
@@ -611,7 +669,7 @@ class OKFBuild:
             body_html = f"""
             <article class="content-page">
               <div class="page-header">
-                <div class="type-badge">{escape(type_label)}</div>{status_badge}{verify_badge}
+                <div class="type-badge">{escape(type_label_text)}</div>{status_badge}{verify_badge}{gi_chip}
                 <h1>{escape(page.title)}</h1>
                 {tags_html}
                 {breadcrumb}
@@ -744,6 +802,15 @@ class OKFBuild:
         html = html.replace("{{HOME_LABEL}}", "首页")
         html = html.replace("{{SEARCH_LABEL}}", "搜索")
         html = html.replace("{{MENU_LABEL}}", "菜单")
+        html = html.replace("{{SEARCH_PLACEHOLDER}}", "搜索食物、食谱、指南...")
+        html = html.replace("{{ARIA_MENU}}", "打开导航菜单")
+        html = html.replace("{{ARIA_SEARCH}}", "搜索")
+        html = html.replace("{{BN_LANG_HREF}}", SITE_URL + "/en/")
+        html = html.replace("{{BN_LANG_LABEL}}", "English")
+        html = html.replace("{{PAGE_INDEX_ZH}}", self.search_index_json("zh"))
+        html = html.replace("{{PAGE_INDEX_EN}}", self.search_index_json("en"))
+        for icon_name, icon_svg in SVG_ICONS.items():
+            html = html.replace(f"{{{{SVG_ICONS[\"{icon_name}\"]}}}}", icon_svg)
         # 404.html may be served at any path depth — search links must be absolute
         html = html.replace("{{SEARCH_BASE}}", SITE_URL + "/")
         html = html.replace("{{CONTENT}}", body)
@@ -793,7 +860,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="{{LANG}}">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2d6a4f" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141a16" media="(prefers-color-scheme: dark)">
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESC}}">
 <link rel="stylesheet" href="{{CSS_HREF}}">
@@ -802,10 +871,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <body>
 <header class="site-header">
   <div class="header-inner">
-    <button class="menu-toggle" aria-label="Toggle navigation">☰<span>{{MENU_LABEL}}</span></button>
+    <button class="menu-toggle" aria-label="{{ARIA_MENU}}">☰<span>{{MENU_LABEL}}</span></button>
     <a href="{{LOGO_HREF}}" class="logo">{{LOGO_TEXT}}</a>
     <div class="header-actions">
-      <button class="search-toggle" id="search-toggle" aria-label="Search">{{SVG_ICONS["search"]}}</button>
+      <button class="search-toggle" id="search-toggle" aria-label="{{ARIA_SEARCH}}">{{SVG_ICONS["search"]}}</button>
       <nav class="lang-nav">
         {{LANG_SWITCH}}
       </nav>
@@ -863,104 +932,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   var searchBase = '{{SEARCH_BASE}}';  // relative path from current page to site root
   
   // Full page index for global search
-  var pageIndex = isZh ? [
-    // 核心概念
-    {t:'血糖生成指数 (GI)', d:'GI是衡量食物引起血糖升高程度的指标', u:'concepts/glycemic-index/', type:'概念', cat:'concepts'},
-    {t:'血糖负荷 (GL)', d:'GL综合考虑GI和份量，更准确评估食物对血糖的影响', u:'concepts/glycemic-load/', type:'概念', cat:'concepts'},
-    {t:'胰岛素指数 (II)', d:'II衡量食物引起胰岛素分泌的程度', u:'concepts/insulin-index/', type:'概念', cat:'concepts'},
-    {t:'膳食纤维', d:'纤维对血糖控制和消化健康的重要性', u:'concepts/dietary-fiber/', type:'概念', cat:'concepts'},
-    // 食材库 - 谷物
-    {t:'燕麦片', d:'低GI谷物，富含β-葡聚糖，有助于控制血糖', u:'foods/grains/rolled-oats/', type:'谷物', cat:'foods'},
-    {t:'糙米', d:'全谷物，GI比白米低，富含纤维', u:'foods/grains/brown-rice/', type:'谷物', cat:'foods'},
-    {t:'藜麦', d:'高蛋白假谷物，GI低，含完整氨基酸', u:'foods/grains/quinoa/', type:'谷物', cat:'foods'},
-    {t:'全麦面包', d:'比白面包GI更低，富含纤维', u:'foods/grains/whole-wheat-bread/', type:'谷物', cat:'foods'},
-    {t:'荞麦', d:'低GI谷物，适合糖尿病患者', u:'foods/grains/buckwheat/', type:'谷物', cat:'foods'},
-    {t:'黑米', d:'抗氧化谷物，富含花青素', u:'foods/grains/black-rice/', type:'谷物', cat:'foods'},
-    // 食材库 - 豆类
-    {t:'鹰嘴豆', d:'高蛋白高纤维豆类，GI极低', u:'foods/legumes/chickpeas/', type:'豆类', cat:'foods'},
-    {t:'扁豆', d:'低GI豆类，富含蛋白质和纤维', u:'foods/legumes/lentils/', type:'豆类', cat:'foods'},
-    {t:'黑豆', d:'高蛋白豆类，富含抗氧化剂', u:'foods/legumes/black-beans/', type:'豆类', cat:'foods'},
-    // 食材库 - 水果
-    {t:'苹果', d:'纤维丰富的水果，GI低，含果胶', u:'foods/fruits/apple/', type:'水果', cat:'foods'},
-    {t:'蓝莓', d:'抗氧化浆果，GI低，富含花青素', u:'foods/fruits/blueberry/', type:'水果', cat:'foods'},
-    {t:'草莓', d:'低糖水果，富含维生素C', u:'foods/fruits/strawberry/', type:'水果', cat:'foods'},
-    {t:'梨', d:'水分丰富，膳食纤维含量高，低GI水果', u:'foods/fruits/pear/', type:'水果', cat:'foods'},
-    {t:'柚子', d:'低GI柑橘类水果', u:'foods/fruits/grapefruit/', type:'水果', cat:'foods'},
-    {t:'樱桃', d:'低GI水果，含天然褪黑素', u:'foods/fruits/cherry/', type:'水果', cat:'foods'},
-    // 食材库 - 蔬菜
-    {t:'西兰花', d:'十字花科蔬菜，GI极低，富含维生素C', u:'foods/vegetables/broccoli/', type:'蔬菜', cat:'foods'},
-    {t:'菠菜', d:'绿叶蔬菜，对血糖影响极小', u:'foods/vegetables/spinach/', type:'蔬菜', cat:'foods'},
-    {t:'羽衣甘蓝', d:'超级食物，营养密度极高', u:'foods/vegetables/kale/', type:'蔬菜', cat:'foods'},
-    {t:'花椰菜', d:'低GI蔬菜，可替代米饭', u:'foods/vegetables/cauliflower/', type:'蔬菜', cat:'foods'},
-    {t:'芦笋', d:'低GI蔬菜，富含叶酸', u:'foods/vegetables/asparagus/', type:'蔬菜', cat:'foods'},
-    {t:'黄瓜', d:'水分丰富，GI极低', u:'foods/vegetables/cucumber/', type:'蔬菜', cat:'foods'},
-    // 食材库 - 蛋白质
-    {t:'鸡胸肉', d:'瘦蛋白，GI为零，增肌首选', u:'foods/proteins/chicken-breast/', type:'蛋白质', cat:'foods'},
-    {t:'鸡蛋', d:'完整蛋白，GI极低，营养全面', u:'foods/proteins/egg/', type:'蛋白质', cat:'foods'},
-    {t:'豆腐', d:'植物蛋白，GI低，富含异黄酮', u:'foods/proteins/tofu/', type:'蛋白质', cat:'foods'},
-    {t:'三文鱼', d:'富含Omega-3的鱼类', u:'foods/proteins/salmon/', type:'蛋白质', cat:'foods'},
-    {t:'希腊酸奶', d:'高蛋白酸奶，益生菌丰富', u:'foods/proteins/greek-yogurt/', type:'蛋白质', cat:'foods'},
-    // 食谱库 - 早餐
-    {t:'燕麦蓝莓碗', d:'高纤维早餐食谱，简单快捷', u:'recipes/breakfast/oatmeal-berry-bowl/', type:'早餐', cat:'recipes'},
-    {t:'鸡蛋菠菜炒', d:'快手早餐食谱，高蛋白低GI', u:'recipes/breakfast/egg-and-spinach-scramble/', type:'早餐', cat:'recipes'},
-    {t:'全麦吐司配牛油果', d:'健康脂肪早餐', u:'recipes/breakfast/avocado-toast/', type:'早餐', cat:'recipes'},
-    // 食谱库 - 正餐
-    {t:'烤鸡沙拉', d:'低GI正餐食谱，高蛋白', u:'recipes/main-meals/grilled-chicken-salad/', type:'正餐', cat:'recipes'},
-    {t:'藜麦蔬菜碗', d:'素食正餐，营养均衡', u:'recipes/main-meals/quinoa-veggie-bowl/', type:'正餐', cat:'recipes'},
-    {t:'三文鱼配芦笋', d:'Omega-3丰富的晚餐', u:'recipes/main-meals/salmon-asparagus/', type:'正餐', cat:'recipes'},
-    // 食谱库 - 小食
-    {t:'希腊酸奶芭菲', d:'健康小食食谱，益生菌丰富', u:'recipes/snacks/greek-yogurt-berry-parfait/', type:'小食', cat:'recipes'},
-    {t:'鹰嘴豆泥', d:'高蛋白零食配蔬菜', u:'recipes/snacks/hummus-veggie/', type:'小食', cat:'recipes'},
-    {t:'坚果混合', d:'健康脂肪零食', u:'recipes/snacks/trail-mix/', type:'小食', cat:'recipes'},
-    // 成品食品
-    {t:'低GI面包', d:'市售低GI面包推荐', u:'products/breads/', type:'成品', cat:'products'},
-    {t:'低GI面条', d:'荞麦面、全麦面等', u:'products/noodles/', type:'成品', cat:'products'},
-    {t:'健康零食', d:'低GI零食选择', u:'products/snacks/', type:'成品', cat:'products'},
-    {t:'低糖饮品', d:'适合糖尿病患者的饮品', u:'products/beverages/', type:'成品', cat:'products'},
-    // 实用指南
-    {t:'如何读食品标签', d:'选购低GI食品的技巧', u:'guides/how-to-read-food-labels/', type:'指南', cat:'guides'},
-    {t:'外出就餐指南', d:'餐厅点餐小技巧', u:'guides/dining-out-tips/', type:'指南', cat:'guides'},
-    {t:'血糖监测指南', d:'如何监测和理解血糖数据', u:'guides/blood-sugar-monitoring/', type:'指南', cat:'guides'},
-    {t:'低GI购物清单', d:'超市购物必备清单', u:'guides/shopping-list/', type:'指南', cat:'guides'},
-    // 社区
-    {t:'常见问题', d:'关于低GI饮食的FAQ', u:'community/faq/', type:'社区', cat:'community'},
-    {t:'贡献指南', d:'如何为知识库做贡献', u:'community/contributing/', type:'社区', cat:'community'},
-    // 更新日志
-    {t:'更新日志', d:'网站更新记录', u:'log/', type:'日志', cat:'log'},
-  ] : [
-    // English index
-    {t:'Glycemic Index (GI)', d:'GI measures how quickly a food raises blood sugar', u:'en/concepts/glycemic-index/', type:'Concept', cat:'concepts'},
-    {t:'Glycemic Load (GL)', d:'GL considers both GI and serving size for accurate impact', u:'en/concepts/glycemic-load/', type:'Concept', cat:'concepts'},
-    {t:'Insulin Index (II)', d:'II measures insulin response to foods', u:'en/concepts/insulin-index/', type:'Concept', cat:'concepts'},
-    {t:'Dietary Fiber', d:'Importance of fiber for blood sugar control', u:'en/concepts/dietary-fiber/', type:'Concept', cat:'concepts'},
-    {t:'Rolled Oats', d:'Low-GI grain rich in beta-glucan', u:'en/foods/grains/rolled-oats/', type:'Grain', cat:'foods'},
-    {t:'Brown Rice', d:'Whole grain with lower GI than white rice', u:'en/foods/grains/brown-rice/', type:'Grain', cat:'foods'},
-    {t:'Quinoa', d:'High-protein pseudograin, low GI', u:'en/foods/grains/quinoa/', type:'Grain', cat:'foods'},
-    {t:'Whole Wheat Bread', d:'Lower GI than white bread', u:'en/foods/grains/whole-wheat-bread/', type:'Grain', cat:'foods'},
-    {t:'Chickpeas', d:'High-protein, high-fiber legume, very low GI', u:'en/foods/legumes/chickpeas/', type:'Legume', cat:'foods'},
-    {t:'Lentils', d:'Low-GI legume rich in protein', u:'en/foods/legumes/lentils/', type:'Legume', cat:'foods'},
-    {t:'Apple', d:'Fiber-rich fruit with low GI', u:'en/foods/fruits/apple/', type:'Fruit', cat:'foods'},
-    {t:'Blueberry', d:'Antioxidant-rich berry, low GI', u:'en/foods/fruits/blueberry/', type:'Fruit', cat:'foods'},
-    {t:'Pear', d:'Water-rich fruit with plenty of fiber, low GI', u:'en/foods/fruits/pear/', type:'Fruit', cat:'foods'},
-    {t:'Strawberry', d:'Low-sugar fruit rich in vitamin C', u:'en/foods/fruits/strawberry/', type:'Fruit', cat:'foods'},
-    {t:'Broccoli', d:'Cruciferous vegetable, very low GI', u:'en/foods/vegetables/broccoli/', type:'Vegetable', cat:'foods'},
-    {t:'Spinach', d:'Leafy green with minimal blood sugar impact', u:'en/foods/vegetables/spinach/', type:'Vegetable', cat:'foods'},
-    {t:'Kale', d:'Nutrient-dense superfood', u:'en/foods/vegetables/kale/', type:'Vegetable', cat:'foods'},
-    {t:'Chicken Breast', d:'Lean protein, zero GI', u:'en/foods/proteins/chicken-breast/', type:'Protein', cat:'foods'},
-    {t:'Egg', d:'Complete protein, very low GI', u:'en/foods/proteins/egg/', type:'Protein', cat:'foods'},
-    {t:'Tofu', d:'Plant-based protein, low GI', u:'en/foods/proteins/tofu/', type:'Protein', cat:'foods'},
-    {t:'Salmon', d:'Omega-3 rich fish', u:'en/foods/proteins/salmon/', type:'Protein', cat:'foods'},
-    {t:'Greek Yogurt', d:'High-protein yogurt with probiotics', u:'en/foods/proteins/greek-yogurt/', type:'Protein', cat:'foods'},
-    {t:'Oatmeal Berry Bowl', d:'High-fiber breakfast recipe', u:'en/recipes/breakfast/oatmeal-berry-bowl/', type:'Breakfast', cat:'recipes'},
-    {t:'Egg and Spinach Scramble', d:'Quick high-protein breakfast', u:'en/recipes/breakfast/egg-and-spinach-scramble/', type:'Breakfast', cat:'recipes'},
-    {t:'Grilled Chicken Salad', d:'Low-GI main meal recipe', u:'en/recipes/main-meals/grilled-chicken-salad/', type:'Main Meal', cat:'recipes'},
-    {t:'Quinoa Veggie Bowl', d:'Balanced vegetarian meal', u:'en/recipes/main-meals/quinoa-veggie-bowl/', type:'Main Meal', cat:'recipes'},
-    {t:'Greek Yogurt Parfait', d:'Healthy snack with probiotics', u:'en/recipes/snacks/greek-yogurt-berry-parfait/', type:'Snack', cat:'recipes'},
-    {t:'How to Read Food Labels', d:'Tips for choosing low-GI foods', u:'en/guides/how-to-read-food-labels/', type:'Guide', cat:'guides'},
-    {t:'Dining Out Tips', d:'Restaurant ordering tips', u:'en/guides/dining-out-tips/', type:'Guide', cat:'guides'},
-    {t:'FAQ', d:'Frequently asked questions about low-GI diet', u:'en/community/faq/', type:'Community', cat:'community'},
-    {t:'Changelog', d:'Site update history', u:'en/log/', type:'Log', cat:'log'},
-  ];
+  var pageIndex = isZh ? {{PAGE_INDEX_ZH}} : {{PAGE_INDEX_EN}};
   
   function openModal() {
     searchModal.classList.add('show');
@@ -978,6 +950,20 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   searchToggle.addEventListener('click', openModal);
   searchClose.addEventListener('click', closeModal);
   backdrop.addEventListener('click', closeModal);
+
+  // 首页 hero 搜索框：聚焦时打开全局搜索弹窗并带入已输入内容
+  var heroInput = document.getElementById('search-input');
+  if (heroInput) {
+    heroInput.addEventListener('focus', function(){
+      var q = heroInput.value;
+      openModal();
+      if (q) {
+        searchInput.value = q;
+        searchInput.dispatchEvent(new Event('input'));
+      }
+      heroInput.blur();
+    });
+  }
   
   // Keyboard shortcuts
   document.addEventListener('keydown', function(e) {
@@ -1071,6 +1057,7 @@ document.addEventListener('DOMContentLoaded', function(){
   <a href="{{LOGO_HREF}}" id="bn-home"><span class="bn-icon">{{SVG_ICONS["home"]}}</span><span class="bn-label">{{HOME_LABEL}}</span></a>
   <a href="#" id="bn-search"><span class="bn-icon">{{SVG_ICONS["search"]}}</span><span class="bn-label">{{SEARCH_LABEL}}</span></a>
   <button id="bn-menu"><span class="bn-icon">{{SVG_ICONS["menu"]}}</span><span class="bn-label">{{MENU_LABEL}}</span></button>
+  <a href="{{BN_LANG_HREF}}" id="bn-lang"><span class="bn-icon">{{SVG_ICONS["globe"]}}</span><span class="bn-label">{{BN_LANG_LABEL}}</span></a>
 </div>
 </body>
 </html>"""
