@@ -2,6 +2,7 @@
 type: "Food"
 title: "Broccoli"
 description: "A cruciferous vegetable powerhouse — very low GI and high nutrient density."
+gi_value: 15
 tags: [vegetable, low-GI, high-fiber, cruciferous]
 sources:
   - resource: "References from Open Food Facts"

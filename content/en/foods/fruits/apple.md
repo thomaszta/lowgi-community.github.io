@@ -2,6 +2,7 @@
 type: "Food"
 title: "Apple"
 description: "A low-GI fruit rich in soluble fiber and antioxidants."
+gi_value: 36
 tags: [fruit, low-GI, high-fiber, vitamins]
 sources:
   - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"

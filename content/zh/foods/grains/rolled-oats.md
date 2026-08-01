@@ -2,6 +2,7 @@
 type: "Food"
 title: "传统燕麦片 (Rolled Oats)"
 description: "未经深加工的传统燕麦片，是典型的低GI主食选择。"
+gi_value: 55
 tags: [谷物, 早餐, 低GI, 高纤维]
 sources:
   - resource: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"

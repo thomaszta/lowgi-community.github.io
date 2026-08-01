@@ -2,6 +2,7 @@
 type: "Food"
 title: "菠菜 (Spinach)"
 description: "营养密度极高的绿叶蔬菜，GI值极低，适合糖尿病人日常食用。"
+gi_value: 15
 tags: [蔬菜, 低GI, 绿叶蔬菜, 高营养]
 sources:
   - resource: "参考 Open Food Facts 数据"

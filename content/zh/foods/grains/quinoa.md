@@ -2,6 +2,7 @@
 type: "Food"
 title: "藜麦 (Quinoa)"
 description: "高蛋白、高纤维的伪谷物，是低GI主食的优秀选择。"
+gi_value: 53
 tags: [谷物, 主食, 低GI, 高蛋白]
 sources:
   - resource: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"

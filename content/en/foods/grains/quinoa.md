@@ -2,6 +2,7 @@
 type: "Food"
 title: "Quinoa"
 description: "A high-protein, high-fiber pseudocereal and an excellent low-GI staple choice."
+gi_value: 53
 tags: [grain, staple, low-GI, high-protein]
 sources:
   - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"

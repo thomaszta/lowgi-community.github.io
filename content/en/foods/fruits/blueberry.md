@@ -2,6 +2,7 @@
 type: "Food"
 title: "Blueberry"
 description: "A low-GI berry packed with anthocyanins and antioxidants."
+gi_value: 53
 tags: [fruit, low-GI, berry, antioxidant]
 sources:
   - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"

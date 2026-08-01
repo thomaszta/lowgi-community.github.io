@@ -2,6 +2,7 @@
 type: "Food"
 title: "糙米 (Brown Rice)"
 description: "保留麸皮和胚芽的全谷物大米，GI值低于白米饭。"
+gi_value: 66
 tags: [谷物, 主食, 中GI, 全谷物]
 sources:
   - resource: "参考 Open Food Facts 及哈佛大学公共卫生学院数据"

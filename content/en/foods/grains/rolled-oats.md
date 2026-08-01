@@ -2,6 +2,7 @@
 type: "Food"
 title: "Rolled Oats"
 description: "Minimally processed rolled oats, a classic low-GI staple food."
+gi_value: 55
 tags: [grain, breakfast, low-GI, high-fiber]
 sources:
   - resource: "References from Open Food Facts and Harvard T.H. Chan School of Public Health"

@@ -2,6 +2,7 @@
 type: "Food"
 title: "豆腐 (Tofu)"
 description: "植物性优质蛋白质来源，低GI且富含大豆异黄酮。"
+gi_value: 25
 tags: [蛋白质, 植物蛋白, 低GI, 素食]
 sources:
   - resource: "参考 Open Food Facts 数据"

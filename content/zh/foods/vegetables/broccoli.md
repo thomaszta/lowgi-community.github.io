@@ -2,6 +2,7 @@
 type: "Food"
 title: "西兰花 (Broccoli)"
 description: "十字花科蔬菜之王，极低GI、高营养密度。"
+gi_value: 15
 tags: [蔬菜, 低GI, 高纤维, 十字花科]
 sources:
   - resource: "参考 Open Food Facts 数据"
