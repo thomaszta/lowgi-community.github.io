@@ -937,12 +937,14 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   function openModal() {
     searchModal.classList.add('show');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
     setTimeout(function() { searchInput.focus(); }, 100);
   }
   
   function closeModal() {
     searchModal.classList.remove('show');
     document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
     searchInput.value = '';
     searchResults.classList.remove('show');
   }
@@ -1034,6 +1036,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if (searchModal) {
         searchModal.classList.add('show');
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
         if (searchInput) setTimeout(function() { searchInput.focus(); }, 100);
       }
     });

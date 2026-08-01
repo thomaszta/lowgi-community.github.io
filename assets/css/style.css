@@ -110,11 +110,17 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
   position: relative;
   width: 90%;
   max-width: 560px;
+  max-height: calc(100dvh - 120px);
+  display: flex;
+  flex-direction: column;
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
+.search-modal .search-results { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+/* 搜索弹窗打开时隐藏底部导航（iOS 键盘弹起会把 fixed 底栏顶到弹窗中间） */
+body.modal-open .bottom-nav { display: none !important; }
 .search-input-wrapper {
   display: flex;
   align-items: center;
@@ -546,6 +552,8 @@ a:hover { color: var(--primary-light); text-decoration: underline; }
 @media (max-width: 768px) {
   .bottom-nav.show { display: flex; }
   .menu-toggle { display: flex; align-items: center; }
+  .search-modal { padding-top: 48px; }
+  .search-modal-content { max-height: calc(100dvh - 72px); }
 
   /* Header mobile：触控目标 ≥44px（Apple HIG） */
   .header-inner { padding: 0 12px; }
